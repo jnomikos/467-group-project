@@ -1,0 +1,1 @@
+INSERT Into Customer (id, name, city, street, contact) VALUES (1, 'Bob', '
