@@ -6,7 +6,7 @@
     name varchar(50) not null,
       address varchar(50) not null,
       city varchar(50) not null,
-      street varchar(50) not null,
+      state varchar(50) not null,
       contact varchar(50) not null
  );
 
@@ -16,7 +16,7 @@
     name varchar(50) not null,
       address varchar(50) not null,
       city varchar(50) not null,
-      street varchar(50) not null,
+      state varchar(50) not null,
       contact varchar(50) not null,
       commission int not null
  );
