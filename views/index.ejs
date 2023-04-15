@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>My Website</title>
+	<style>
+		/* Style for the selection bar */
+		.navbar {
+			background-color: #333;
+			overflow: hidden;
+		}
+		
+		/* Style for the links in the selection bar */
+		.navbar a {
+			float: left;
+			color: white;
+			text-align: center;
+			padding: 14px 16px;
+			text-decoration: none;
+			font-size: 17px;
+		}
+		
+		/* Style for the active link in the selection bar */
+		.navbar a.active {
+			background-color: #4CAF50;
+			color: white;
+		}
+	</style>
+</head>
+<body>
+	<!-- The selection bar -->
+	<div class="navbar">
+		<a class="active" href="#">Home</a>
+		<a href="/about">About</a>
+	</div>
+
+	<!-- The content of the website -->
+	<h1>Welcome to my website!</h1>
+
+	<!-- If you go onto server.js, you will see this is passed into the render -->
+	<%= locals.text %>
+
+	<p>This is some sample text for my website.</p>
+</body>
+</html>
