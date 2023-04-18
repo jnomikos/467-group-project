@@ -1,34 +1,30 @@
- use csci467;
 
- create table admin (
-    -- make int id the primary key and auto increment
-    adminID int not null auto_increment primary key,
-    name varchar(50) not null,
-      address varchar(50) not null,
-      city varchar(50) not null,
-      state varchar(50) not null,
-      contact varchar(50) not null
- );
 
- create table Employee (
-    -- make int id the primary key and auto increment
-    employeeID int not null auto_increment primary key,
-    name varchar(50) not null,
-      address varchar(50) not null,
-      city varchar(50) not null,
-      state varchar(50) not null,
-      contact varchar(50) not null,
-      commission int not null
- );
+CREATE TABLE admin (
+  adminID INTEGER PRIMARY KEY AUTOINCREMENT,
+  name VARCHAR(50) NOT NULL,
+  address VARCHAR(50) NOT NULL,
+  city VARCHAR(50) NOT NULL,
+  state VARCHAR(50) NOT NULL,
+  contact VARCHAR(50) NOT NULL
+);
 
- create table quote (
-      -- make int id the primary key and auto increment
-      quoteID int not null auto_increment primary key,
-      customerID int not null,
-      employeeID int not null,
-      paymentInfo varchar(50) not null,
-      price int not null,
-      description varchar(50) not null,
-      foreign key (customerID) references customers(customerID),
-      foreign key (employeeID) references Employee(employeeID)
-   );
+CREATE TABLE employee (
+  employeeID INTEGER PRIMARY KEY AUTOINCREMENT,
+  name VARCHAR(50) NOT NULL,
+  address VARCHAR(50) NOT NULL,
+  city VARCHAR(50) NOT NULL,
+  state VARCHAR(50) NOT NULL,
+  contact VARCHAR(50) NOT NULL,
+  commission INTEGER NOT NULL
+);
+
+CREATE TABLE quote (
+  quoteID INTEGER PRIMARY KEY AUTOINCREMENT,
+  customerID INTEGER NOT NULL DEFAULT 0,
+  employeeID INTEGER NOT NULL,
+  paymentInfo VARCHAR(50) NOT NULL,
+  price INTEGER NOT NULL,
+  description VARCHAR(50) NOT NULL,
+  FOREIGN KEY (employeeID) REFERENCES employee(employeeID)
+);
