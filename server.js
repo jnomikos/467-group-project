@@ -15,5 +15,9 @@ app.get("/", (req, res) => {
 const aboutRouter = require('./routes/about');
 app.use('/about', aboutRouter);
 
+// Login page
+const loginRouter = require('./routes/login');
+app.use('/login', loginRouter);
+
 // Choose what port the server will be on. If running this on your local machine, type localhost:3000 in your browser
 app.listen(3000);
