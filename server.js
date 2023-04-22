@@ -1,14 +1,42 @@
 const express = require("express");
+const cookieParser = require("cookie-parser");
+const sessions = require('express-session');
 const app = express();
 
-// Sets our view engine for express which is ejs.
+const oneDay = 1000 * 60 * 60 * 24;
+app.use(sessions({
+    secret: "thisisasecretkey",
+    saveUninitialized:true,
+    cookie: { maxAge: oneDay },
+    resave: false 
+}));
 
+// Cookie parser middleware
+app.use(cookieParser());
+
+// Middleware in Express that parses form data from a POST request 
+app.use(express.urlencoded({ extended: true }))
+
+// Allow you to parse JSON info from body
+app.use(express.json());
+
+// Sets our view engine for express which is ejs.
 app.set('view engine', 'ejs');
 
 // Whenever a user sends a get request (loads up webpage) at index, we will render index.html
 app.get("/", (req, res) => {
-    console.log("Here");
-    res.render("index", {text: "Test"});
+    let session = req.session;
+
+    if(session.username) {
+        res.render("index", {loggedOn: true, username: session.username});
+    } else {
+        res.render("index");
+    }
+});
+
+app.get('/logout',(req,res) => {
+    req.session.destroy();
+    res.redirect('/');
 });
 
 // The about page
