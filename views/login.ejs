@@ -15,14 +15,17 @@
 </head>
 <body>
     <center><h1>Login to Quote Service</h1></center>
-    <form>
-        <div class = "logininfo">
-            <label>Username</label>
-            <input type = "text" placeholder = "Enter Username Here" name = "username" required> </br>
-            <label>Password</label>
-            <input type = "password" placeholder = "Enter Password Here" name = "password" required> </br>
-            <button type = "submit">Login</button>
+    <form action="/login" method="POST">
+        <div style="text-align: center;">
+            <label><%= locals.warning %></label>
         </div>
+        <div class="logininfo">
+            <label>Username</label>
+            <input type="text" placeholder="Enter Username Here" name="username" value="<%= locals.username %>" required></br>
+            <label>Password</label>
+            <input type="password" placeholder="Enter Password Here" name="password" value="<%= locals.password %>" required></br>
+            <button type="submit">Login</button>
+          </div>
     </form>
 </body>
 </html>

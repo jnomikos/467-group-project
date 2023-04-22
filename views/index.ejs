@@ -5,7 +5,7 @@
 	<style>
 		/* Style for the selection bar */
 		.navbar {
-			background-color: #333;
+			background-color: #5a6365;
 			overflow: hidden;
 		}
 		
@@ -21,7 +21,7 @@
 		
 		/* Style for the active link in the selection bar */
 		.navbar a.active {
-			background-color: #4CAF50;
+			background-color: #8cb2f3;
 			color: white;
 		}
 	</style>
@@ -31,14 +31,16 @@
 	<div class="navbar">
 		<a class="active" href="#">Home</a>
 		<a href="/about">About</a>
-		<a href = "/login">Logout</a>
+		<% if (locals.loggedOn) { %>
+			<a href = "/logout">Logout</a>
+		<% } else { %>
+			<a href = "/login">Login</a>
+		<% } %></a>
 	</div>
 
 	<!-- The content of the website -->
 	<h1>Welcome to my website!</h1>
 
-	<!-- If you go onto server.js, you will see this is passed into the render -->
-	<%= locals.text %>
 
 	<p>This is some sample text for my website.</p>
 </body>
