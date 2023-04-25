@@ -8,9 +8,13 @@ let db = new sqlite3.Database('database/mydatabase.db');
 //allow employees to enter sales quotes
 router.get("/", (req, res) => {
     console.log("Enter Sales Quote");
-    res.render("enterSalesQuote");
-}
-);
+    let session = req.session;
+    if(!session.username) {
+        res.redirect('/');
+    } else {
+        res.render("enterQuote", {loggedOn: true, username: session.username});
+    }
+});
 
 //allow employees to enter sales quotes
 router.post("/", (req, res) => {
@@ -29,4 +33,6 @@ router.post("/", (req, res) => {
         res.redirect("/enterSalesQuote");
     });
 });
+
+module.exports = router;
 

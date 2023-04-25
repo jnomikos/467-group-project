@@ -43,6 +43,10 @@ app.get('/logout',(req,res) => {
 const aboutRouter = require('./routes/about');
 app.use('/about', aboutRouter);
 
+// The about page
+const enterQuoteRouter = require('./routes/enterSalesQuote');
+app.use('/enterSalesQuote', enterQuoteRouter);
+
 // Login page
 const loginRouter = require('./routes/login');
 app.use('/login', loginRouter);
