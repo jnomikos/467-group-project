@@ -46,4 +46,22 @@ function checkValidEmployee(username, password) {
 
 }
 
+//build a function to check admin login
+function checkValidAdmin(username, password) {
+    // We return a promise here since db.get is async
+    return new Promise((resolve, reject) => {
+        db.get(`SELECT * FROM admin WHERE name = "${username}" AND password = "${password}"`, (err, row)=>{
+            if (err) {
+                return reject(err);
+            }
+
+            if(row) {
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        });
+    });
+}
+
 module.exports = router;
