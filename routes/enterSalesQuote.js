@@ -16,14 +16,13 @@ router.get("/", (req, res) => {
 router.post("/", (req, res) => {
     const customerID = req.body.customerID;
     const employeeID = req.body.employeeID;
-   // const customerEmail = req.body.customerEmail;
+    const customerEmail = req.body.customerEmail;
     const paymentInfo = req.body.paymentInfo;
     const price = req.body.price;
     const description = req.body.description;
 
 
-    //db.run(`INSERT INTO salesQuote (customerID, employeeID, customerEmail, paymentInfo, price, description) VALUES ("${customerID}", "${employeeID}", "${customerEmail}", "${paymentInfo}", "${price}", "${description}")`, (err) => {
-    db.run(`INSERT INTO salesQuote (customerID, employeeID, paymentInfo, price, description) VALUES ("${customerID}", "${employeeID}", "${paymentInfo}", "${price}", "${description}")`, (err) => {
+    db.run(`INSERT INTO salesQuote (customerID, employeeID, customerEmail, paymentInfo, price, description) VALUES ("${customerID}", "${employeeID}", "${customerEmail}", "${paymentInfo}", "${price}", "${description}")`, (err) => {
     if (err) {
             console.log(err);
         }
