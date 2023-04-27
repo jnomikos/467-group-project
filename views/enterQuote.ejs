@@ -42,7 +42,10 @@
 	<!-- The content of the website -->
 	<h2>Create a New Quote For Customer:</h2>
 	<label>Select customer:</label>
-	<select id ="Please select one">
+	<select name="Customer Name" id="customerName">
+		<% for(let i = 0; i < locals.customers.length; i++) { %>
+			<option value="<%=locals.customers[i].name%>"><%=locals.customers[i].name%></option>
+		<%}%>
 	</select>
 	<p></p>
 </body>

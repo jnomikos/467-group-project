@@ -8,7 +8,7 @@ let db = new sqlite3.Database('database/mydatabase.db');
 router.get("/", (req, res) => {
     console.log("Admin");
     let session = req.session;
-    if(!session.username) {
+    if(!session.username || session.level != 'admin') {
         res.redirect('/');
     } else {
         res.render("adminInterface", {loggedOn: true, username: session.username});
@@ -142,6 +142,11 @@ router.post("/quote", (req, res) => {
         }
         res.render("quote", {rows: rows});
     });
+});
+
+router.get('/logout',(req,res) => {
+    req.session.destroy();
+    res.redirect('/');
 });
 
 module.exports = router;

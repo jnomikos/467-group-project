@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const sqlite3 = require('sqlite3').verbose();
+const mysql = require('mysql2');
 
 // Open database
 let db = new sqlite3.Database('database/mydatabase.db');
+
 
 //allow employees to enter sales quotes
 router.get("/", (req, res) => {
@@ -12,7 +14,25 @@ router.get("/", (req, res) => {
     if(!session.username) {
         res.redirect('/');
     } else {
-        res.render("enterQuote", {loggedOn: true, username: session.username});
+        const connection = mysql.createConnection({
+            host: 'blitz.cs.niu.edu',
+            user: 'student',
+            password: 'student',
+            database: 'csci467',
+            port: '3306'
+        });
+    
+        connection.query(
+        'SELECT * FROM `customers`',
+        function(err, results, fields) {
+            if(err) {
+                console.error(err);
+                res.redirect('/');
+                return;
+            }
+
+            res.render("enterQuote", {loggedOn: true, username: session.username, customers: results});
+        });
     }
 });
 
@@ -33,6 +53,8 @@ router.post("/", (req, res) => {
         res.redirect("/enterSalesQuote");
     });
 });
+
+
 
 module.exports = router;
 
