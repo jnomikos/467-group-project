@@ -7,26 +7,13 @@ let db = new sqlite3.Database('database/mydatabase.db');
 
 router.get("/", (req, res) => {
     console.log("Admin");
-    res.render("adminInterface");
+    let session = req.session;
+    if(!session.username) {
+        res.redirect('/');
+    } else {
+        res.render("adminInterface", {loggedOn: true, username: session.username});
+    }
 });
-
-router.post("/", (req, res) => {
-    const username = req.body.username;
-    const password = req.body.password;
-    
-    checkValidAdmin(username, password).then(isValid => {
-        if(isValid) {
-            let session=req.session;
-            session.username=req.body.username;
-            res.redirect('/adminInterface');
-        } else {
-            res.render("adminInterface", {warning: "Invalid username or password!", username: username, password: password});
-        }
-    })
-   
-});
-
-
 
 // access all employee info and allow admin to edit
 router.get("/employee", (req, res) => {
