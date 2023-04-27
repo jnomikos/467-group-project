@@ -30,6 +30,13 @@
 </head>
 <body>
     <div class = "navbar">
+        <a href="/">Home</a>
+		<a href="/about">About</a>
+		<% if (locals.loggedOn) { %>
+			<a href = "/logout">Logout</a>
+		<% } else { %>
+			<a href = "/login">Login</a>
+		<% } %></a>
         <a href = "/logout">Logout</a>
     </div>
 </body>
