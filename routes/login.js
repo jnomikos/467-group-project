@@ -13,14 +13,22 @@ router.get("/", (req, res) => {
 router.post("/", (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
-    
+
     checkValidEmployee(username, password).then(isValid => {
         if(isValid) {
             let session=req.session;
             session.username=req.body.username;
             res.redirect('/');
         } else {
-            res.render("login", {warning: "Invalid username or password!", username: username, password: password});
+            checkValidAdmin(username, password).then(isValid => {
+                if(isValid) {
+                    let session=req.session;
+                    session.username=req.body.username;
+                    res.redirect('/adminInterface');
+                } else {
+                    res.render("login", {warning: "Invalid username or password!", username: username, password: password});
+                }
+            })
         }
     })
 })
