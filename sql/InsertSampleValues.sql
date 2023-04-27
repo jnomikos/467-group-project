@@ -9,10 +9,13 @@ INSERT INTO employee(employeeID, name, password, address, city, state, contact, 
 (3, 'John', 'password', '1234 North St', 'Dekalb', 'Illinois', '156-456-3645', 10);
 
 
-
 INSERT INTO quote(quoteID, customerID, employeeID, paymentInfo, price, description) VALUES 
 (1, 1, 1, 'Credit Card', 100, 'This is a description'),
 (2, 2, 2, 'Credit Card', 100, 'This is a description'),
 (3, 3, 3, 'Credit Card', 100, 'This is a description'),
 (4, 4, 1, 'Credit Card', 100, 'This is a description'),
 (5, 5, 2, 'Credit Card', 100, 'This is a description');
+
+UPDATE employee
+SET name = sam
+WHERE employeeID = 2;

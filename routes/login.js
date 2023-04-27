@@ -23,7 +23,6 @@ router.post("/", (req, res) => {
             res.render("login", {warning: "Invalid username or password!", username: username, password: password});
         }
     })
-   
 })
 
 // Checks if employee exists in our database with matching username and password
