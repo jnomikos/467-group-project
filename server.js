@@ -28,7 +28,7 @@ app.get("/", (req, res) => {
     let session = req.session;
 
     if(session.username) {
-        res.render("index", {loggedOn: true, username: session.username});
+        res.render("index", {loggedOn: true, username: session.username, level: session.level});
     } else {
         res.render("index");
     }

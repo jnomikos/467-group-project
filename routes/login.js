@@ -15,17 +15,19 @@ router.post("/", (req, res) => {
     const password = req.body.password;
 
     checkValidEmployee(username, password).then(isValid => {
-        if(isValid) {
+        if(isValid) { // Valid employee login
             let session=req.session;
-            session.username=req.body.username;
+            session.username = req.body.username;
+            session.level = 'employee';
             res.redirect('/');
         } else {
             checkValidAdmin(username, password).then(isValid => {
-                if(isValid) {
-                    let session=req.session;
-                    session.username=req.body.username;
-                    res.redirect('/admin');
-                } else {
+                if(isValid) { // Valid admin login
+                    let session = req.session;
+                    session.username = req.body.username;
+                    session.level = 'admin';
+                    res.redirect('/');
+                } else { // Invalid; not an employee or admin
                     res.render("login", {warning: "Invalid username or password!", username: username, password: password});
                 }
             })
