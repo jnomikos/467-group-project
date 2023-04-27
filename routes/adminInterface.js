@@ -5,44 +5,78 @@ const sqlite3 = require('sqlite3').verbose();
 // Open database
 let db = new sqlite3.Database('database/mydatabase.db');
 
-router.get("/", (req, res) => {
+function getEmployees() {
+    return new Promise((resolve, reject) => {
+        db.all(`SELECT * FROM employee`, (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
+
+router.get("/", async (req, res) => {
     console.log("Admin");
     let session = req.session;
     if(!session.username || session.level != 'admin') {
         res.redirect('/');
     } else {
-        res.render("adminInterface", {loggedOn: true, username: session.username});
+        try {
+            let employees = await getEmployees();
+            console.log(employees);
+            res.render("adminInterface", {loggedOn: true, username: session.username, employees: employees});
+        } catch(error) {
+            console.log(error);
+            res.status(500).send("Internal Server Error");
+        }
+        
     }
 });
 
-// access all employee info and allow admin to edit
-router.get("/employee", (req, res) => {
-    console.log("Employee");
-    db.all(`SELECT * FROM employee`, (err, rows) => {
+
+router.post("/add_employee", async (req, res) => {
+    let session = req.session;
+    let employees;
+    try {
+        employees = await getEmployees();
+    } catch(error) {
+        console.log(error);
+        res.status(500).send("Internal Server Error");
+    }
+
+    // First we check if username and password were given
+    if(!req.body.name_input || !req.body.password_input) {
+        res.render("adminInterface", {loggedOn: true, username: session.username, employees: employees, addEmployeeText: "Username or password field is blank!"});
+        return;
+    }
+
+    // Then we check if the username already exists
+    for(let employee of employees) {
+        if(employee.name == req.body.name_input) {
+            res.render("adminInterface", {loggedOn: true, username: session.username, employees: employees, addEmployeeText: "Cannot add employee! Username already exists."});
+            return;
+        }
+    }  
+
+    // Adds a new employee
+    db.run(`INSERT INTO employee (name, password) VALUES ("${req.body.name_input}", "${req.body.password_input}")`, (err) => {
         if (err) {
             console.log(err);
         }
-        res.render("employee", {rows: rows});
     });
+    
+    // Now we do getEmployees again so that new employee can show in our table
+    try {
+        employees = await getEmployees();
+    } catch(error) {
+        console.log(error);
+        res.status(500).send("Internal Server Error");
+    }
+    res.render("adminInterface", {loggedOn: true, username: session.username, employees: employees, addEmployeeText: "Successfully added a new employee"});
 });
 
-//allow admin to add new employee
-router.post("/employee", (req, res) => {
-    const name = req.body.name;
-    const password = req.body.password;
-    const address = req.body.address;
-    const city = req.body.city;
-    const state = req.body.state;
-    const contact = req.body.contact;
-    const commission = req.body.commission;
-
-    db.run(`INSERT INTO employee (name, password, address, city, state, contact, commission) VALUES ("${name}", "${password}", "${address}", "${city}", "${state}", "${contact}", "${commission}")`, (err) => {
-    if (err) {
-            console.log(err);
-        }
-        res.redirect("/adminInterface/employee");
-    });
-});
 
 //allow admin to add, edit, and delete employees
 router.get("/employee/:id", (req, res) => {

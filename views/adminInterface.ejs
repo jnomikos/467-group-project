@@ -61,17 +61,29 @@
             <thead>
                 <th>ID</th>
                 <th>Name</th>
+                <th>Email</th>
                 <th>Commission</th>
                 <th>Edit</th>
                 <th>Delete</th>
             </thead>
+            <% for(let i = 0; i < locals.employees.length; i++) { %>
+                <tr>
+                    <td><%= locals.employees[i].employeeID %></td>
+                    <td><%= locals.employees[i].name %></td>
+                    <td><%= locals.employees[i].contact %></td>
+                    <td><%= locals.employees[i].commission %></td>
+                </tr>
+            <% }%>
         </table>
         <tbody></tbody>
-        <label>Name</label>
-        <input type="text" id="name-input">
-        <label>Password</label>
-        <input type ="text" id="password-input">
-        <button>Add New Employee</button>
+        <p><%= locals.addEmployeeText %></p>
+        <form method="POST" action="/admin/add_employee">
+            <label>Name</label>
+            <input type="text" id="name_input" name="name_input">
+            <label>Password</label>
+            <input type ="text" id="password_input" name="password_input">
+            <button type="submit">Add New Employee</button>
+        </form>
     </main>
     <script src="adminInterface.js"></script>
 </body>
