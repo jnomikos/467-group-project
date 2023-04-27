@@ -24,7 +24,7 @@ router.post("/", (req, res) => {
                 if(isValid) {
                     let session=req.session;
                     session.username=req.body.username;
-                    res.redirect('/adminInterface');
+                    res.redirect('/admin');
                 } else {
                     res.render("login", {warning: "Invalid username or password!", username: username, password: password});
                 }

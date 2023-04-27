@@ -1,9 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,
-    initial-scale=1.0">
     <title>Admin Interface</title>
     <style>
         .navbar {
@@ -32,17 +29,10 @@
     <main>
         <label>Name</label>
         <input type="text" id="name-input">
-        <label>Password</label>
-        <input type ="text" id = "password-input">
     </main>
     <div class = "navbar">
         <a href="/">Home</a>
 		<a href="/about">About</a>
-		<% if (locals.loggedOn) { %>
-			<a href = "/logout">Logout</a>
-		<% } else { %>
-			<a href = "/login">Login</a>
-		<% } %></a>
     </div>
 </body>
 </html>
