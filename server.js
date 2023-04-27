@@ -43,9 +43,17 @@ app.get('/logout',(req,res) => {
 const aboutRouter = require('./routes/about');
 app.use('/about', aboutRouter);
 
+// The enterQuote page
+const enterQuoteRouter = require('./routes/enterSalesQuote');
+app.use('/enterSalesQuote', enterQuoteRouter);
+
 // Login page
 const loginRouter = require('./routes/login');
 app.use('/login', loginRouter);
+
+// Admin page
+const adminRouter = require('./routes/adminInterface');
+app.use('/admin', adminRouter);
 
 // Choose what port the server will be on. If running this on your local machine, type localhost:3000 in your browser
 app.listen(3000);
