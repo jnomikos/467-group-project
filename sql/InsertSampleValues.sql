@@ -5,7 +5,7 @@ INSERT INTO admin (adminID, name, password, address, city, state, contact) VALUE
 
 INSERT INTO employee(employeeID, name, password, address, city, state, contact, commission) VALUES
 (1, 'Bobbie', 'password', '800 North street', 'Chicago', 'Illinois', '779-456-1264', 10),
-(2, 'Sally', 'password', '1234 East St', 'Dekalb', 'Illinois', '425-954-8245', 10),
+(2, 'Sam', 'password', '1234 East St', 'Dekalb', 'Illinois', '425-954-8245', 10),
 (3, 'John', 'password', '1234 North St', 'Dekalb', 'Illinois', '156-456-3645', 10);
 
 
