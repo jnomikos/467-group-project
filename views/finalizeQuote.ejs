@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Finalize Quote</title>
+    <style>
+		/* Style for the selection bar */
+		.navbar {
+			background-color: #5a6365;
+			overflow: hidden;
+		}
+		
+		/* Style for the links in the selection bar */
+		.navbar a {
+			float: left;
+			color: white;
+			text-align: center;
+			padding: 14px 16px;
+			text-decoration: none;
+			font-size: 17px;
+		}
+		
+		/* Style for the active link in the selection bar */
+		.navbar a.active {
+			background-color: #8cb2f3;
+			color: white;
+		}
+	</style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="/">Home</a>
+        <a href="/enterSalesQuote">Enter Sales Quote</a>
+        <a class="active" href="/finalizedQuote">Finalized Quote</a>
+        <% if (locals.loggedOn) { %>
+			<a href = "/logout">Logout</a>
+        <% } else { %>
+			<a href = "/login">Login</a>
+        <% } %></a>
+    </div>
+    
+    <h2>Finalized Quotes</h2>
+</body>
+</html>
