@@ -7,7 +7,7 @@ let db = new sqlite3.Database('database/mydatabase.db');
 
 function getEmployees() {
     return new Promise((resolve, reject) => {
-        db.all(`SELECT * FROM employee`, (err, rows) => {
+        db.all(`SELECT * FROM employee WHERE isAdmin = 0`, (err, rows) => {
             if (err) {
                 reject(err);
             } else {
@@ -24,9 +24,9 @@ router.get("/", async (req, res) => {
         res.redirect('/');
     } else {
         try {
+            const editEmployee = req.query.editEmployee || '';
             let employees = await getEmployees();
-            console.log(employees);
-            res.render("adminInterface", {loggedOn: true, username: session.username, employees: employees});
+            res.render("adminInterface", {loggedOn: true, username: session.username, employees: employees, editEmployee: editEmployee});
         } catch(error) {
             console.log(error);
             res.status(500).send("Internal Server Error");
@@ -47,21 +47,21 @@ router.post("/add_employee", async (req, res) => {
     }
 
     // First we check if username and password were given
-    if(!req.body.name_input || !req.body.password_input) {
+    if(!req.body.name_input || !req.body.username_input || !req.body.password_input) {
         res.render("adminInterface", {loggedOn: true, username: session.username, employees: employees, addEmployeeText: "Username or password field is blank!"});
         return;
     }
 
     // Then we check if the username already exists
     for(let employee of employees) {
-        if(employee.name == req.body.name_input) {
+        if(employee.username == req.body.username_input) {
             res.render("adminInterface", {loggedOn: true, username: session.username, employees: employees, addEmployeeText: "Cannot add employee! Username already exists."});
             return;
         }
     }  
 
     // Adds a new employee
-    db.run(`INSERT INTO employee (name, password) VALUES ("${req.body.name_input}", "${req.body.password_input}")`, (err) => {
+    db.run(`INSERT INTO employee (name, username, password) VALUES ("${req.body.name_input}", "${req.body.username_input}", "${req.body.password_input}")`, (err) => {
         if (err) {
             console.log(err);
         }
@@ -75,6 +75,36 @@ router.post("/add_employee", async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
     res.render("adminInterface", {loggedOn: true, username: session.username, employees: employees, addEmployeeText: "Successfully added a new employee"});
+});
+
+router.post("/remove_employee", async (req, res) => {
+
+    console.log("Request to delete employee " + req.body.employeeID);
+
+    db.run(`DELETE FROM employee WHERE employeeID = "${req.body.employeeID}"`, (err) => {
+        if (err) {
+            console.log(err);
+        }
+    });
+
+    // We do getEmployees to refresh table
+    let employees;
+    try {
+        employees = await getEmployees();
+    } catch(error) {
+        console.log(error);
+        res.status(500).send("Internal Server Error");
+    }
+
+    res.render("adminInterface", {loggedOn: true, username: req.session.username, employees: employees});
+});
+
+router.post("/editing_employee", async (req, res) => {
+
+    const employeeID = req.body.employeeID;
+    // Update the variable value here
+    res.redirect(`/admin?editEmployee=${employeeID}`);
+    
 });
 
 
@@ -107,15 +137,7 @@ router.post("/employee/:id", (req, res) => {
     });
 });
 
-router.get("/employee/delete/:id", (req, res) => {
-    const id = req.params.id;
-    db.run(`DELETE FROM employee WHERE id = "${id}"`, (err) => {
-        if (err) {
-            console.log(err);
-        }
-        res.redirect("/adminInterface/employee");
-    });
-});
+
 
 //allow admin to search and view quotes based on status, date range, employee, and customer
 router.get("/quote", (req, res) => {

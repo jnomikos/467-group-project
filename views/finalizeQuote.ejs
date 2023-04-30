@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,
+	<meta name="viewport" content="width=device-width,
     initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-	<title>Enter Quote</title>
-	<style>
+    <title>Finalize Quote</title>
+    <style>
 	</style>
 </head>
 <body>
@@ -20,21 +19,13 @@
 			</div>
 			<ul class="nav navbar-nav">
 				<li><a href="/">Home</a></li>
-				<li class="active"><a href="/enterSalesQuote">Enter Sales Quote</a></li>
-				<li><a href="/finalizeQuote">Finalized Quotes</a></li>
+				<li><a href="/enterSalesQuote">Enter Sales Quote</a></li>
+				<li class="active"><a href="/finalizeQuote">Finalized Quotes</a></li>
 				<li><a href = "/logout">Logout</a></li>
 			</ul>
 		</div>
 	</nav>
-
-	<!-- The content of the website -->
-	<h2>Create a New Quote For Customer:</h2>
-	<label>Select customer:</label>
-	<select name="Customer Name" id="customerName">
-		<% for(let i = 0; i < locals.customers.length; i++) { %>
-			<option value="<%=locals.customers[i].name%>"><%=locals.customers[i].name%></option>
-		<%}%>
-	</select>
-	<p></p>
+    
+    <h2>Finalized Quotes</h2>
 </body>
 </html>

@@ -40,7 +40,7 @@ router.post("/", (req, res) => {
 function checkValidEmployee(username, password) {
     // We return a promise here since db.get is async
     return new Promise((resolve, reject) => {
-        db.get(`SELECT * FROM employee WHERE name = "${username}" AND password = "${password}"`, (err, row)=>{
+        db.get(`SELECT * FROM employee WHERE username = "${username}" AND password = "${password}" AND isAdmin = 0`, (err, row)=>{
             if (err) {
                 return reject(err);
             }
@@ -59,7 +59,7 @@ function checkValidEmployee(username, password) {
 function checkValidAdmin(username, password) {
     // We return a promise here since db.get is async
     return new Promise((resolve, reject) => {
-        db.get(`SELECT * FROM admin WHERE name = "${username}" AND password = "${password}"`, (err, row)=>{
+        db.get(`SELECT * FROM employee WHERE username = "${username}" AND password = "${password}" AND isAdmin = 1`, (err, row)=>{
             if (err) {
                 return reject(err);
             }

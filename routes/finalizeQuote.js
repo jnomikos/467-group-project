@@ -10,8 +10,18 @@ customer. The email contains all quote data except the secret notes"
 
  //Path: routes\finalizeQuote.js
 // Compare this snippet from routes\finalizeQuote.js:
- router.get("/finalizeQuote", (req, res) => {
-     console.log("Finalize Quote");
+const express = require('express');
+const router = express.Router();
+const sqlite3 = require('sqlite3').verbose();
+const mysql = require('mysql2');
+let db = new sqlite3.Database('database/mydatabase.db');
+
+router.get("/", (req, res) => {
+    console.log("Finalize Quote");
+    let session = req.session;
+    if(!session.username){
+        res.redirect('/');
+    } else {
         db.all(`SELECT * FROM quote`, (err, rows) => {
             if (err) {
                 console.log(err);
@@ -19,6 +29,7 @@ customer. The email contains all quote data except the secret notes"
             res.render("finalizeQuote", {rows: rows});
         }
     );
+    }
 });
 
 router.post("/finalizeQuote", (req, res) => {
@@ -41,3 +52,10 @@ router.post("/finalizeQuote", (req, res) => {
         res.render("finalizeQuote", {rows: rows});
     });
 });
+
+router.get('/logout',(req,res) => {
+    req.session.destroy();
+    res.redirect('/');
+});
+
+module.exports = router;

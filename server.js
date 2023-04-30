@@ -55,5 +55,8 @@ app.use('/login', loginRouter);
 const adminRouter = require('./routes/adminInterface');
 app.use('/admin', adminRouter);
 
+const finalizeRouter = require('./routes/finalizeQuote');
+app.use('/finalizeQuote', finalizeRouter);
+
 // Choose what port the server will be on. If running this on your local machine, type localhost:3000 in your browser
 app.listen(3000);
