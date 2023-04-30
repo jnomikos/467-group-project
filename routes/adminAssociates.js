@@ -26,7 +26,7 @@ router.get("/", async (req, res) => {
         try {
             const editEmployee = req.query.editEmployee || '';
             let employees = await getEmployees();
-            res.render("adminInterface", {loggedOn: true, username: session.username, employees: employees, editEmployee: editEmployee});
+            res.render("adminAssociates", {loggedOn: true, username: session.username, employees: employees, editEmployee: editEmployee});
         } catch(error) {
             console.log(error);
             res.status(500).send("Internal Server Error");
@@ -48,14 +48,14 @@ router.post("/add_employee", async (req, res) => {
 
     // First we check if username and password were given
     if(!req.body.name_input || !req.body.username_input || !req.body.password_input) {
-        res.render("adminInterface", {loggedOn: true, username: session.username, employees: employees, addEmployeeText: "Username or password field is blank!"});
+        res.render("adminAssociates", {loggedOn: true, username: session.username, employees: employees, addEmployeeText: "Username or password field is blank!"});
         return;
     }
 
     // Then we check if the username already exists
     for(let employee of employees) {
         if(employee.username == req.body.username_input) {
-            res.render("adminInterface", {loggedOn: true, username: session.username, employees: employees, addEmployeeText: "Cannot add employee! Username already exists."});
+            res.render("adminAssociates", {loggedOn: true, username: session.username, employees: employees, addEmployeeText: "Cannot add employee! Username already exists."});
             return;
         }
     }  
@@ -74,7 +74,7 @@ router.post("/add_employee", async (req, res) => {
         console.log(error);
         res.status(500).send("Internal Server Error");
     }
-    res.render("adminInterface", {loggedOn: true, username: session.username, employees: employees, addEmployeeText: "Successfully added a new employee"});
+    res.render("adminAssociates", {loggedOn: true, username: session.username, employees: employees, addEmployeeText: "Successfully added a new employee"});
 });
 
 router.post("/remove_employee", async (req, res) => {
@@ -96,14 +96,14 @@ router.post("/remove_employee", async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 
-    res.render("adminInterface", {loggedOn: true, username: req.session.username, employees: employees});
+    res.render("adminAssociates", {loggedOn: true, username: req.session.username, employees: employees});
 });
 
 router.post("/editing_employee", async (req, res) => {
 
     const employeeID = req.body.employeeID;
     // Update the variable value here
-    res.redirect(`/admin?editEmployee=${employeeID}`);
+    res.redirect(`/adminAssociates?editEmployee=${employeeID}`);
     
 });
 
@@ -144,7 +144,7 @@ router.post("/commit_edit", async (req, res) => {
     }
 
     if(failText) {
-        res.render("adminInterface", {loggedOn: true, username: req.session.username, employees: employees, editTableText:failText});
+        res.render("adminAssociates", {loggedOn: true, username: req.session.username, employees: employees, editTableText:failText});
         return;
     }
 
@@ -153,7 +153,7 @@ router.post("/commit_edit", async (req, res) => {
         if (err) {
             console.log(err);
         }
-        res.redirect("/admin");
+        res.redirect("/adminAssociatesn");
     });
     
 });
@@ -184,7 +184,7 @@ router.post("/employee/:id", (req, res) => {
         if (err) {
             console.log(err);
         }
-        res.redirect("/adminInterface/employee");
+        res.redirect("/adminAssociates/employee");
     });
 });
 

@@ -39,9 +39,6 @@ app.get('/logout',(req,res) => {
     res.redirect('/');
 });
 
-// The about page
-const aboutRouter = require('./routes/about');
-app.use('/about', aboutRouter);
 
 // The enterQuote page
 const enterQuoteRouter = require('./routes/enterSalesQuote');
@@ -52,8 +49,8 @@ const loginRouter = require('./routes/login');
 app.use('/login', loginRouter);
 
 // Admin page
-const adminRouter = require('./routes/adminInterface');
-app.use('/admin', adminRouter);
+const adminAssociatesRouter = require('./routes/adminAssociates');
+app.use('/adminAssociates', adminAssociatesRouter);
 
 const finalizeRouter = require('./routes/finalizeQuote');
 app.use('/finalizeQuote', finalizeRouter);

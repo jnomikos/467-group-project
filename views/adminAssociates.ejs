@@ -48,17 +48,16 @@
             margin: 20px auto;
             text-align: center; 
         }
-        table{
-            border-collapse: collapse;
-            margin: 50px auto;
-            border: none;
-        }
         th, td{
             border-collapse: collapse;
             border: 1px solid #000
         }
         th, td{
             padding: 5px;
+        }
+
+        th {
+            text-align: center;  
         }
 
         td {
@@ -77,35 +76,30 @@
 			</div>
             <ul class="nav navbar-nav">
                 <li><a href="/">Home</a></li>
-                <li class="active"><a href="/admin">Admin Interface</a></li>
+                <li class="active"><a href="/adminAssociates">Sales Associates</a></li>
                 <li><a href = "/logout">Logout</a></li>
             </ul>
         </div>
     </nav>
     <main>
         <h2>Our Sales Associates</h2>
-        <div>
-            <input placeholder="search by name"
-            id="search-input">
-            <button id="search-btn">Search</button>
-        </div>
         <p><%= locals.editTableText %></p>
-        <table id="employeeTable" id="table">
+        <table id="employeeTable" id="table" class="table">
             <thead>
-                <th>ID</th>
-                <th>Username</th>
-                <th>Name</th>
-                <th>Contact</th>
-                <th>Address</th>
-                <th>City</th>
-                <th>State</th>
-                <th>Commission</th>
+                <th scope="col">ID</th>
+                <th scope="col">Username</th>
+                <th scope="col">Name</th>
+                <th scope="col">Contact</th>
+                <th scope="col">Address</th>
+                <th scope="col">City</th>
+                <th scope="col">State</th>
+                <th scope="col">Commission</th>
             </thead>
             <% for(let i = 0; i < locals.employees.length; i++) { %>
                 <tr>
                     <% if(locals.editEmployee == locals.employees[i].employeeID) { %>
-                        <form method="POST" action="/admin/commit_edit">
-                            <td class="table-id-field"><%= locals.employees[i].employeeID %></td>
+                        <form method="POST" action="/adminAssociates/commit_edit">
+                            <th scope="row" class="table-id-field"><%= locals.employees[i].employeeID %></td>
                             <td>
                                 <input type="text" class="table-text-input" id="edited_username" name="edited_username" value="<%= locals.employees[i].username%>">
                             </td>
@@ -187,7 +181,7 @@
                                 </button>
                             </td>
                         </form>
-                        <form method="GET" action="/admin/">
+                        <form method="GET" action="/adminAssociates/">
                             <td class="no-border table-button-element">
                                 <button href="#" class="btn btn-danger btn-sm">
                                     <span class="glyphicon glyphicon-remove-circle"></span> Cancel
@@ -196,7 +190,7 @@
                         </form>
                         
                     <% } else { %>   
-                        <td class="table-id-field"><%= locals.employees[i].employeeID %></td>
+                        <th scope="row" class="table-id-field"><%= locals.employees[i].employeeID %></td>
                         <td><%= locals.employees[i].username %></td>
                         <td><%= locals.employees[i].name %></td>
                         <td><%= locals.employees[i].contact %></td>
@@ -205,7 +199,7 @@
                         <td class="table-state-field"><%= locals.employees[i].state %></td>
                         <td>$<%=locals.employees[i].commission %></td>
                         <td class="no-border table-button-element">
-                            <form method="POST" action="/admin/editing_employee">
+                            <form method="POST" action="/adminAssociates/editing_employee">
                             <input type="hidden" name="employeeID" value="<%= locals.employees[i].employeeID%>">
                             <button type="submit" href="#" class="btn btn-info btn-sm">
                             <span class="glyphicon glyphicon-edit"></span> Edit
@@ -224,7 +218,7 @@
         <br>
         <h3>Add a new employee:</h3>
         <p><%= locals.addEmployeeText %></p>
-        <form method="POST" action="/admin/add_employee">
+        <form method="POST" action="/adminAssociates/add_employee">
             <label class="center-label">Name</label>
             <input type="text" id="name_input" name="name_input"><br>
             <label class="center-label">Username</label>
@@ -241,7 +235,7 @@
                     // create a new XMLHttpRequest object
                     let xhr = new XMLHttpRequest();
                     // Send a post request via javascript
-                    xhr.open("POST", "/admin/remove_employee", true);
+                    xhr.open("POST", "/adminAssociates/remove_employee", true);
                     xhr.setRequestHeader("Content-Type", "application/json");
                     let payload = {employeeID: employeeID};
                     xhr.send(JSON.stringify(payload));
@@ -262,6 +256,6 @@
             });
         </script>
     </main>
-    <script src="adminInterface.js"></script>
+    <script src="adminAssociates.js"></script>
 </body>
 </html>
