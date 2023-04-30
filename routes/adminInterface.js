@@ -107,6 +107,57 @@ router.post("/editing_employee", async (req, res) => {
     
 });
 
+router.post("/commit_edit", async (req, res) => {
+
+    const employeeID = req.body.employeeID;
+    const username = req.body.edited_username;
+    const name = req.body.edited_name;
+    const contact = req.body.edited_contact;
+    const address = req.body.edited_address;
+    const city = req.body.edited_city;
+    const state = req.body.edited_state;
+    const commission = req.body.edited_commission;
+
+
+
+
+    let employees;
+    try {
+        employees = await getEmployees();
+    } catch(error) {
+        console.log(error);
+        res.status(500).send("Internal Server Error");
+    }
+
+    let failText;
+
+    // Check if username is set
+    if(!username) {
+        failText = "Employee must have a username!";
+    } else {
+        // Check if the username already exists
+        for(let employee of employees) {
+            if(employee.username == username && employee.employeeID != employeeID) {
+                failText = "Cannot commit changes! Username already exists!"
+            }
+        } 
+    }
+
+    if(failText) {
+        res.render("adminInterface", {loggedOn: true, username: req.session.username, employees: employees, editTableText:failText});
+        return;
+    }
+
+
+    db.run(`UPDATE employee SET username = "${username}", name = "${name}", address = "${address}", city = "${city}", state = "${state}", contact = "${contact}", commission = "${commission}" WHERE employeeID = "${employeeID}"`, (err) => {
+        if (err) {
+            console.log(err);
+        }
+        res.redirect("/admin");
+    });
+    
+});
+
 
 //allow admin to add, edit, and delete employees
 router.get("/employee/:id", (req, res) => {
