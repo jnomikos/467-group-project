@@ -7,28 +7,16 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
     <title>Admin Interface</title>
     <style>
-        .navbar {
-            background-color: #5a6365;
-            overflow: hidden;
+
+        .center-label {
+            display: inline-block;
+            width: 150px;
+            text-align: right;
         }
-        
-        /* Style for the links in the selection bar */
-        .navbar a {
-            float: left;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-            font-size: 17px;
-        }
-    
-        /* Style for the active link in the selection bar */
-        .navbar a.active {
-            background-color: #8cb2f3;
-            color: white;
-        }
+
         /*Style for the main page*/
         main{
             margin: 20px auto;
@@ -45,14 +33,24 @@
             padding: 5px;
         }
 
+        
+
     </style>
 </head>
 <body>
 
-    <div class = "navbar">
-        <a href="/">Home</a>
-		<a href="/about">About</a>
-    </div>
+    <nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">WebSiteName</a>
+			</div>
+            <ul class="nav navbar-nav">
+                <li><a href="/">Home</a></li>
+                <li class="active"><a href="/admin">Admin Interface</a></li>
+                <li><a href = "/logout">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
     <main>
         <h2>Our Sales Associates</h2>
         <div>
@@ -63,6 +61,7 @@
         <table id="table">
             <thead>
                 <th>ID</th>
+                <th>Username</th>
                 <th>Name</th>
                 <th>Contact</th>
                 <th>Address</th>
@@ -73,6 +72,7 @@
             <% for(let i = 0; i < locals.employees.length; i++) { %>
                 <tr>
                     <td><%= locals.employees[i].employeeID %></td>
+                    <td><%= locals.employees[i].username %></td>
                     <td><%= locals.employees[i].name %></td>
                     <td><%= locals.employees[i].contact %></td>
                     <td><%= locals.employees[i].address %></td>
@@ -88,12 +88,16 @@
             <% }%>
         </table>
         <tbody></tbody>
+        <br>
+        <h3>Add a new employee:</h3>
         <p><%= locals.addEmployeeText %></p>
         <form method="POST" action="/admin/add_employee">
-            <label>Name</label>
-            <input type="text" id="name_input" name="name_input">
-            <label>Password</label>
-            <input type ="text" id="password_input" name="password_input">
+            <label class="center-label">Name</label>
+            <input type="text" id="name_input" name="name_input"><br>
+            <label class="center-label">Username</label>
+            <input type="text" id="username_input" name="username_input"><br>
+            <label class="center-label">Password</label>
+            <input type ="text" id="password_input" name="password_input"><br>
             <button type="submit">Add New Employee</button>
         </form>
 

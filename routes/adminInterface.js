@@ -47,21 +47,21 @@ router.post("/add_employee", async (req, res) => {
     }
 
     // First we check if username and password were given
-    if(!req.body.name_input || !req.body.password_input) {
+    if(!req.body.name_input || !req.body.username_input || !req.body.password_input) {
         res.render("adminInterface", {loggedOn: true, username: session.username, employees: employees, addEmployeeText: "Username or password field is blank!"});
         return;
     }
 
     // Then we check if the username already exists
     for(let employee of employees) {
-        if(employee.name == req.body.name_input) {
+        if(employee.username == req.body.username_input) {
             res.render("adminInterface", {loggedOn: true, username: session.username, employees: employees, addEmployeeText: "Cannot add employee! Username already exists."});
             return;
         }
     }  
 
     // Adds a new employee
-    db.run(`INSERT INTO employee (name, password) VALUES ("${req.body.name_input}", "${req.body.password_input}")`, (err) => {
+    db.run(`INSERT INTO employee (name, username, password) VALUES ("${req.body.name_input}", "${req.body.username_input}", "${req.body.password_input}")`, (err) => {
         if (err) {
             console.log(err);
         }
