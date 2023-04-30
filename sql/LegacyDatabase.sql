@@ -1,24 +1,15 @@
 
-
-CREATE TABLE admin (
-  adminID INTEGER PRIMARY KEY AUTOINCREMENT,
-  name VARCHAR(50) NOT NULL,
-  password VARCHAR(50) NOT NULL,
-  address VARCHAR(50) NOT NULL,
-  city VARCHAR(50) NOT NULL,
-  state VARCHAR(50) NOT NULL,
-  contact VARCHAR(50) NOT NULL
-);
-
 CREATE TABLE employee (
   employeeID INTEGER PRIMARY KEY AUTOINCREMENT,
-  name VARCHAR(50) NOT NULL,
+  username INTEGER NOT NULL,
   password VARCHAR(50) NOT NULL,
+  name VARCHAR(50) NOT NULL,
   address VARCHAR(50),
   city VARCHAR(50),
   state VARCHAR(50),
   contact VARCHAR(50),
-  commission INTEGER DEFAULT(0)
+  commission INTEGER DEFAULT(0),
+  isAdmin INTEGER DEFAULT(0)
 );
 
 CREATE TABLE quote (
