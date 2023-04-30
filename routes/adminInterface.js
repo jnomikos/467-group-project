@@ -7,10 +7,11 @@ let db = new sqlite3.Database('database/mydatabase.db');
 
 function getEmployees() {
     return new Promise((resolve, reject) => {
-        db.all(`SELECT * FROM employee`, (err, rows) => {
+        db.all(`SELECT * FROM employee WHERE isAdmin = 0`, (err, rows) => {
             if (err) {
                 reject(err);
             } else {
+                console.log(rows);
                 resolve(rows);
             }
         });
@@ -25,7 +26,6 @@ router.get("/", async (req, res) => {
     } else {
         try {
             let employees = await getEmployees();
-            console.log(employees);
             res.render("adminInterface", {loggedOn: true, username: session.username, employees: employees});
         } catch(error) {
             console.log(error);
@@ -77,6 +77,28 @@ router.post("/add_employee", async (req, res) => {
     res.render("adminInterface", {loggedOn: true, username: session.username, employees: employees, addEmployeeText: "Successfully added a new employee"});
 });
 
+router.post("/remove_employee", async (req, res) => {
+
+    console.log("Request to delete employee " + req.body.employeeID);
+
+    db.run(`DELETE FROM employee WHERE employeeID = "${req.body.employeeID}"`, (err) => {
+        if (err) {
+            console.log(err);
+        }
+    });
+
+    // We do getEmployees to refresh table
+    let employees;
+    try {
+        employees = await getEmployees();
+    } catch(error) {
+        console.log(error);
+        res.status(500).send("Internal Server Error");
+    }
+
+    res.render("adminInterface", {loggedOn: true, username: req.session.username, employees: employees});
+});
+
 
 //allow admin to add, edit, and delete employees
 router.get("/employee/:id", (req, res) => {
@@ -107,15 +129,7 @@ router.post("/employee/:id", (req, res) => {
     });
 });
 
-router.get("/employee/delete/:id", (req, res) => {
-    const id = req.params.id;
-    db.run(`DELETE FROM employee WHERE id = "${id}"`, (err) => {
-        if (err) {
-            console.log(err);
-        }
-        res.redirect("/adminInterface/employee");
-    });
-});
+
 
 //allow admin to search and view quotes based on status, date range, employee, and customer
 router.get("/quote", (req, res) => {

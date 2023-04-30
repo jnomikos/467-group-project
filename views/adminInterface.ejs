@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,
     initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <title>Admin Interface</title>
     <style>
         .navbar {
@@ -62,6 +65,7 @@
                 <th>ID</th>
                 <th>Name</th>
                 <th>Contact</th>
+                <th>Address</th>
                 <th>Commission</th>
                 <th>Edit</th>
                 <th>Delete</th>
@@ -71,7 +75,15 @@
                     <td><%= locals.employees[i].employeeID %></td>
                     <td><%= locals.employees[i].name %></td>
                     <td><%= locals.employees[i].contact %></td>
+                    <td><%= locals.employees[i].address %></td>
                     <td><%= locals.employees[i].commission %></td>
+                    <td><a href="#" class="btn btn-info btn-sm">
+                        <span class="glyphicon glyphicon-edit"></span> Edit
+                        </a></td>
+                        <td><button onclick="confirmRemoveEmployee('<%= locals.employees[i].employeeID %>', '<%= locals.employees[i].name %>')" href="#" class="btn btn-danger btn-sm">
+                            <span class="glyphicon glyphicon-remove-circle"></span> Remove
+                          </button>
+                          </td>
                 </tr>
             <% }%>
         </table>
@@ -84,6 +96,30 @@
             <input type ="text" id="password_input" name="password_input">
             <button type="submit">Add New Employee</button>
         </form>
+
+
+        <script>
+            function confirmRemoveEmployee(employeeID, employeeName) {
+                if (confirm("Are you sure you want to remove the employee " + employeeName + "?") == true) {
+                    // create a new XMLHttpRequest object
+                    let xhr = new XMLHttpRequest();
+                    // Send a post request via javascript
+                    xhr.open("POST", "/admin/remove_employee", true);
+                    xhr.setRequestHeader("Content-Type", "application/json");
+                    let payload = {employeeID: employeeID};
+                    xhr.send(JSON.stringify(payload));
+
+                    // Handle the response from the server
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState == 4 && xhr.status == 200) {
+                            // Reload the page to update the table
+                            location.reload();
+                        }
+                    };
+                  
+                }
+            }
+        </script>
     </main>
     <script src="adminInterface.js"></script>
 </body>
