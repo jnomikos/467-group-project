@@ -11,7 +11,6 @@ function getEmployees() {
             if (err) {
                 reject(err);
             } else {
-                console.log(rows);
                 resolve(rows);
             }
         });
@@ -25,8 +24,9 @@ router.get("/", async (req, res) => {
         res.redirect('/');
     } else {
         try {
+            const editEmployee = req.query.editEmployee || '';
             let employees = await getEmployees();
-            res.render("adminInterface", {loggedOn: true, username: session.username, employees: employees});
+            res.render("adminInterface", {loggedOn: true, username: session.username, employees: employees, editEmployee: editEmployee});
         } catch(error) {
             console.log(error);
             res.status(500).send("Internal Server Error");
@@ -97,6 +97,14 @@ router.post("/remove_employee", async (req, res) => {
     }
 
     res.render("adminInterface", {loggedOn: true, username: req.session.username, employees: employees});
+});
+
+router.post("/editing_employee", async (req, res) => {
+
+    const employeeID = req.body.employeeID;
+    // Update the variable value here
+    res.redirect(`/admin?editEmployee=${employeeID}`);
+    
 });
 
 

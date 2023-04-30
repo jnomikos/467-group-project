@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    
+
     <title>Admin Interface</title>
     <style>
 
@@ -32,9 +32,6 @@
         th, td{
             padding: 5px;
         }
-
-        
-
     </style>
 </head>
 <body>
@@ -58,7 +55,7 @@
             id="search-input">
             <button id="search-btn">Search</button>
         </div>
-        <table id="table">
+        <table id="employeeTable" id="table">
             <thead>
                 <th>ID</th>
                 <th>Username</th>
@@ -66,26 +63,65 @@
                 <th>Contact</th>
                 <th>Address</th>
                 <th>Commission</th>
-                <th>Edit</th>
-                <th>Delete</th>
+                <th></th>
+                <th></th>
             </thead>
             <% for(let i = 0; i < locals.employees.length; i++) { %>
                 <tr>
-                    <td><%= locals.employees[i].employeeID %></td>
-                    <td><%= locals.employees[i].username %></td>
-                    <td><%= locals.employees[i].name %></td>
-                    <td><%= locals.employees[i].contact %></td>
-                    <td><%= locals.employees[i].address %></td>
-                    <td><%= locals.employees[i].commission %></td>
-                    <td><a href="#" class="btn btn-info btn-sm">
-                        <span class="glyphicon glyphicon-edit"></span> Edit
-                        </a></td>
+                    <% if(locals.editEmployee == locals.employees[i].employeeID) { %>
+                        <form method="POST" action="/admin/commit_edit">
+                            <td><%= locals.employees[i].employeeID %></td>
+                            <td>
+                                <input type="text" id="edited_username" name="edited_username" value="<%= locals.employees[i].username%>">
+                            </td>
+                            <td>
+                                <input type="text" id="edited_name" name="edited_name" value="<%= locals.employees[i].name %>">
+                            </td>
+                            <td>
+                                <input type="text" id="edited_contact" name="edited_contact" value="<%= locals.employees[i].contact%>">
+                            </td>
+                            <td>
+                                <input type="text" id="edited_address" name="edited_address" value="<%= locals.employees[i].address%>">
+                            </td>
+                            <td>
+                                <input type="text" id="edited_commission" name="edited_commission" value="<%= locals.employees[i].commission %>">
+                            </td>
+                            <td> 
+                                <input type="hidden" name="employeeID" value="<%= locals.employees[i].employeeID%>">
+                                <button type="submit" href="#" class="btn btn-success btn-sm editEmployee">
+                                <span class="glyphicon glyphicon-edit"></span> Save
+                                </button>
+                            </td>
+                        </form>
+                        <form method="GET" action="/admin/">
+                            <td><button href="#" class="btn btn-danger btn-sm">
+                                <span class="glyphicon glyphicon-remove-circle"></span> Cancel
+                            </button>
+                            </td>
+                        </form>
+                        
+                    <% } else { %>   
+                        <td><%= locals.employees[i].employeeID %></td>
+                        <td><%= locals.employees[i].username %></td>
+                        <td><%= locals.employees[i].name %></td>
+                        <td><%= locals.employees[i].contact %></td>
+                        <td><%= locals.employees[i].address %></td>
+                        <td><%= locals.employees[i].commission %></td>
+                        <td>
+                            <form method="POST" action="/admin/editing_employee">
+                            <input type="hidden" name="employeeID" value="<%= locals.employees[i].employeeID%>">
+                            <button type="submit" href="#" class="btn btn-info btn-sm editEmployee">
+                            <span class="glyphicon glyphicon-edit"></span> Edit
+                            </button>
+                            </form>
+                        </td>
                         <td><button onclick="confirmRemoveEmployee('<%= locals.employees[i].employeeID %>', '<%= locals.employees[i].name %>')" href="#" class="btn btn-danger btn-sm">
                             <span class="glyphicon glyphicon-remove-circle"></span> Remove
-                          </button>
-                          </td>
+                        </button>
+                        </td>
+                    <% } %>
                 </tr>
-            <% }%>
+            <% } %>
         </table>
         <tbody></tbody>
         <br>
@@ -123,6 +159,7 @@
                   
                 }
             }
+            
         </script>
     </main>
     <script src="adminInterface.js"></script>
