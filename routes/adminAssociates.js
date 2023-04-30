@@ -153,7 +153,7 @@ router.post("/commit_edit", async (req, res) => {
         if (err) {
             console.log(err);
         }
-        res.redirect("/adminAssociatesn");
+        res.redirect("/adminAssociates");
     });
     
 });
