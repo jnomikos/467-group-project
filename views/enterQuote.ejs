@@ -35,6 +35,18 @@
 			<option value="<%=locals.customers[i].name%>"><%=locals.customers[i].name%></option>
 		<%}%>
 	</select>
+	<!--allow employee to create a quote; quote consists of the customer id, the employee id, the customers email, the customers payment info, the price, and a description-->
+	<form action="/enterSalesQuote" method="post">
+		<label>Customer Email:</label>
+		<input type="text" name="customerEmail" id="customerEmail" placeholder="Customer Email">
+		<label>Customer Payment Info:</label>
+		<input type="text" name="customerPaymentInfo" id="customerPaymentInfo" placeholder="Customer Payment Info">
+		<label>Price:</label>
+		<input type="text" name="price" id="price" placeholder="Price">
+		<label>Description:</label>
+		<input type="text" name="description" id="description" placeholder="Description">
+		<input type="submit" value="Submit">
+	</form>	
 	<p></p>
 </body>
 </html>
