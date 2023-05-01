@@ -37,14 +37,20 @@
 	</select>
 	<!--allow employee to create a quote; quote consists of the customer id, the employee id, the customers email, the customers payment info, the price, and a description-->
 	<form action="/enterSalesQuote" method="post">
+		<!--create a new line-->
+		<br>
 		<label>Customer Email:</label>
 		<input type="text" name="customerEmail" id="customerEmail" placeholder="Customer Email">
+		<br>
 		<label>Customer Payment Info:</label>
 		<input type="text" name="customerPaymentInfo" id="customerPaymentInfo" placeholder="Customer Payment Info">
+		<br>
 		<label>Price:</label>
 		<input type="text" name="price" id="price" placeholder="Price">
+		<br>
 		<label>Description:</label>
 		<input type="text" name="description" id="description" placeholder="Description">
+		<br>
 		<input type="submit" value="Submit">
 	</form>	
 	<p></p>
