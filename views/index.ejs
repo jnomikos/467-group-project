@@ -24,6 +24,7 @@
 			<% if (locals.loggedOn && locals.level == 'employee') { %>
 				<li><a href="/enterSalesQuote">Enter Sales Quote</a></li>
 				<li><a href="/finalizeQuote">Finalized Quotes</a></li>
+				<li><a href="/convertQuote">Convert to Purchase Order</a></li>
 				<li><a href = "/logout">Logout</a></li>
 			<% } else if (locals.loggedOn && locals.level == 'admin') { %>
 				<li><a href="/adminAssociates">Sales Associates</a></li>

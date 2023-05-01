@@ -52,6 +52,9 @@ router.post("/", (req, res) => {
         }
         res.redirect("/enterSalesQuote");
     });
+
+    //redirect to finalize sales quote page
+    res.redirect("/finalizeSalesQuote");
 });
 
 
