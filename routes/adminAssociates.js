@@ -26,7 +26,7 @@ router.get("/", async (req, res) => {
         try {
             const editEmployee = req.query.editEmployee || '';
             let employees = await getEmployees();
-            res.render("adminInterface", {loggedOn: true, username: session.username, employees: employees, editEmployee: editEmployee});
+            res.render("adminAssociates", {loggedOn: true, username: session.username, employees: employees, editEmployee: editEmployee});
         } catch(error) {
             console.log(error);
             res.status(500).send("Internal Server Error");
@@ -48,14 +48,14 @@ router.post("/add_employee", async (req, res) => {
 
     // First we check if username and password were given
     if(!req.body.name_input || !req.body.username_input || !req.body.password_input) {
-        res.render("adminInterface", {loggedOn: true, username: session.username, employees: employees, addEmployeeText: "Username or password field is blank!"});
+        res.render("adminAssociates", {loggedOn: true, username: session.username, employees: employees, addEmployeeText: "Username or password field is blank!"});
         return;
     }
 
     // Then we check if the username already exists
     for(let employee of employees) {
         if(employee.username == req.body.username_input) {
-            res.render("adminInterface", {loggedOn: true, username: session.username, employees: employees, addEmployeeText: "Cannot add employee! Username already exists."});
+            res.render("adminAssociates", {loggedOn: true, username: session.username, employees: employees, addEmployeeText: "Cannot add employee! Username already exists."});
             return;
         }
     }  
@@ -74,7 +74,7 @@ router.post("/add_employee", async (req, res) => {
         console.log(error);
         res.status(500).send("Internal Server Error");
     }
-    res.render("adminInterface", {loggedOn: true, username: session.username, employees: employees, addEmployeeText: "Successfully added a new employee"});
+    res.render("adminAssociates", {loggedOn: true, username: session.username, employees: employees, addEmployeeText: "Successfully added a new employee"});
 });
 
 router.post("/remove_employee", async (req, res) => {
@@ -96,14 +96,65 @@ router.post("/remove_employee", async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 
-    res.render("adminInterface", {loggedOn: true, username: req.session.username, employees: employees});
+    res.render("adminAssociates", {loggedOn: true, username: req.session.username, employees: employees});
 });
 
 router.post("/editing_employee", async (req, res) => {
 
     const employeeID = req.body.employeeID;
     // Update the variable value here
-    res.redirect(`/admin?editEmployee=${employeeID}`);
+    res.redirect(`/adminAssociates?editEmployee=${employeeID}`);
+    
+});
+
+router.post("/commit_edit", async (req, res) => {
+
+    const employeeID = req.body.employeeID;
+    const username = req.body.edited_username;
+    const name = req.body.edited_name;
+    const contact = req.body.edited_contact;
+    const address = req.body.edited_address;
+    const city = req.body.edited_city;
+    const state = req.body.edited_state;
+    const commission = req.body.edited_commission;
+
+
+
+
+    let employees;
+    try {
+        employees = await getEmployees();
+    } catch(error) {
+        console.log(error);
+        res.status(500).send("Internal Server Error");
+    }
+
+    let failText;
+
+    // Check if username is set
+    if(!username) {
+        failText = "Employee must have a username!";
+    } else {
+        // Check if the username already exists
+        for(let employee of employees) {
+            if(employee.username == username && employee.employeeID != employeeID) {
+                failText = "Cannot commit changes! Username already exists!"
+            }
+        } 
+    }
+
+    if(failText) {
+        res.render("adminAssociates", {loggedOn: true, username: req.session.username, employees: employees, editTableText:failText});
+        return;
+    }
+
+
+    db.run(`UPDATE employee SET username = "${username}", name = "${name}", address = "${address}", city = "${city}", state = "${state}", contact = "${contact}", commission = "${commission}" WHERE employeeID = "${employeeID}"`, (err) => {
+        if (err) {
+            console.log(err);
+        }
+        res.redirect("/adminAssociates");
+    });
     
 });
 
@@ -133,7 +184,7 @@ router.post("/employee/:id", (req, res) => {
         if (err) {
             console.log(err);
         }
-        res.redirect("/adminInterface/employee");
+        res.redirect("/adminAssociates/employee");
     });
 });
 
