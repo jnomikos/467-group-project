@@ -3,6 +3,7 @@ const cookieParser = require("cookie-parser");
 const sessions = require('express-session');
 const app = express();
 
+
 const oneDay = 1000 * 60 * 60 * 24;
 app.use(sessions({
     secret: "thisisasecretkey",
@@ -48,9 +49,13 @@ app.use('/enterSalesQuote', enterQuoteRouter);
 const loginRouter = require('./routes/login');
 app.use('/login', loginRouter);
 
-// Admin page
+// Admin associates page
 const adminAssociatesRouter = require('./routes/adminAssociates');
 app.use('/adminAssociates', adminAssociatesRouter);
+
+// Admin quotes page
+const adminQuotesRouter = require('./routes/adminQuotes');
+app.use('/adminQuotes', adminQuotesRouter);
 
 const finalizeRouter = require('./routes/finalizeQuote');
 app.use('/finalizeQuote', finalizeRouter);
