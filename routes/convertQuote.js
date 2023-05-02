@@ -12,14 +12,23 @@ customer with all the purchase details, including the processing date."
 
 // Path: routes\convertQuote.js
 // Compare this snippet from routes\convertQuote.js:
+const express = require('express');
+const router = express.Router();
+const sqlite3 = require('sqlite3').verbose();
+const mysql = require('mysql2');
 
- router.get("/convertQuote", (req, res) => {
-        console.log("Convert Quote");
-            db.all(`SELECT * FROM quote`, (err, rows) => {
-                if (err) {
-                    console.log(err);
-                }
-                res.render("convertQuote", {rows: rows});
+// Open database
+let db = new sqlite3.Database('database/mydatabase.db');
+
+router.get("/", (req, res) => {
+    console.log("Convert Quote");
+        db.all(`SELECT * FROM quote`, (err, rows) => {
+            if (err) {
+                console.log(err);
             }
-        );
-    });
+            res.render("convertQuote", {rows: rows});
+        }
+    );
+});
+
+module.exports = router;

@@ -57,8 +57,13 @@ app.use('/adminAssociates', adminAssociatesRouter);
 const adminQuotesRouter = require('./routes/adminQuotes');
 app.use('/adminQuotes', adminQuotesRouter);
 
+// Finalize quote page
 const finalizeRouter = require('./routes/finalizeQuote');
 app.use('/finalizeQuote', finalizeRouter);
+
+// Processing order page
+const processRouter = require('./routes/convertQuote');
+app.use('/convertQuote', processRouter);
 
 // Choose what port the server will be on. If running this on your local machine, type localhost:3000 in your browser
 app.listen(3000);
