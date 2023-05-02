@@ -8,8 +8,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-	<title>My Website</title>
+	<title>Quote Service</title>
 	<style>
+		.h1{
+			color: teal;
+		}
+		.h4{
+			color: teal;
+		}
 	</style>
 </head>
 <body>
@@ -17,7 +23,7 @@
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<a class="navbar-brand" href="#">WebSiteName</a>
+				<a class="navbar-brand" href="#">Plant Repair Services</a>
 			</div>
 			<ul class="nav navbar-nav">
 			<li class="active"><a href="#">Home</a></li>
@@ -31,18 +37,19 @@
 				<li><a href="/adminQuotes">Quotes</a></li>
 				<li><a href = "/logout">Logout</a></li>
 			<% } else { %>
-				<li><a href = "/login">Login</a></li>
+				<li class="login"><a href = "/login">Login</a></li>
 			<% } %></a>
 			</ul>
 		</div>
 	</nav>
-
+	  </div>
 	<!-- The content of the website -->
-	<h1>Welcome to my website!</h1>
+	<h1 class = "h1">Welcome to Plant Repair Services!</h1>
 
-
-	<p>This is some sample text for my website. hello
-		
+	<p>Since 2023, Plant Repair Services has been working 
+		with customers across the globe!
+		Our employees can help you set up a quote today!
 	</p>
+	<h4 class="h4">get a quote today!</h4>
 </body>
 </html>
