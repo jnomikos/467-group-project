@@ -44,9 +44,10 @@ router.post("/", (req, res) => {
     const paymentInfo = req.body.paymentInfo;
     const price = req.body.price;
     const description = req.body.description;
+    const status = sanctioned;
 
 
-    db.run(`INSERT INTO salesQuote (customerID, employeeID, customerEmail, paymentInfo, price, description) VALUES ("${customerID}", "${employeeID}", "${customerEmail}", "${paymentInfo}", "${price}", "${description}")`, (err) => {
+    db.run(`INSERT INTO salesQuote (customerID, employeeID, customerEmail, paymentInfo, price, description, status) VALUES ("${customerID}", "${employeeID}", "${customerEmail}", "${paymentInfo}", "${price}", "${description}", "${status}")`, (err) => {
     if (err) {
             console.log(err);
         }
