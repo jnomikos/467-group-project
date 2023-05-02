@@ -7,25 +7,65 @@
     <title>Login</title>
     <style>
         .logininfo{
-            margin: 0;
-            text-align: center;
-            font-size: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #b9e7e7;
         }
+    
+        .h1{
+            font-size: 20px;
+            color: teal;
+            margin-bottom: 20px;
+        }
+        .form{
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+        }
+        .input{
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+            width:200px;
+            gap: 20px;
+            padding: 10px;
+            border: none;             
+            border-bottom: 1px solid gray
+        }
+        .button{
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            flex-direction: column;
+            padding: 50px;
+            background-color: white;
+            width:200px;
+            gap: 20px;
+            padding: 5px;
+            border: none;
+            background-color: teal;
+            cursor: pointer;
+            color: white;
+        }        
     </style>
 </head>
 <body>
-    <center><h1>Login to Quote Service</h1></center>
-    <form action="/login" method="POST">
-        <div style="text-align: center;">
-            <label><%= locals.warning %></label>
-        </div>
+    <form class ="form"action="/login" method="POST">
         <div class="logininfo">
-            <label>Username</label>
-            <input type="text" placeholder="Enter Username Here" name="username" value="<%= locals.username %>" required></br>
-            <label>Password</label>
-            <input type="password" placeholder="Enter Password Here" name="password" value="<%= locals.password %>" required></br>
-            <button type="submit">Login</button>
+            <h1 class="h1">Please Login:</h1>
+            <div style="text-align: center;">
+                <label><%= locals.warning %></label>
+            </div>
+            <input class="input" type="text" placeholder="Enter Username Here" name="username" value="<%= locals.username %>" required></br>
+            <input class="input" type="password" placeholder="Enter Password Here" name="password" value="<%= locals.password %>" required></br>
+            <button class="button" type="submit">Login</button>
           </div>
     </form>
+    </div>
 </body>
 </html>
