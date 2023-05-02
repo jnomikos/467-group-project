@@ -10,11 +10,12 @@
 
     <title>Admin Interface</title>
     <style>
-
+        .h2{
+            color:rgb(121, 191, 229);
+        }
         .center-label {
             display: inline-block;
-            width: 150px;
-            text-align: right;
+            column-width: 90px;
         }
 
         .no-border {
@@ -26,9 +27,9 @@
         }
 
         .table-id-field {
-            width: 50px;
-            min-width: 50px;
-            max-width: 50px;
+            width: auto;
+            min-width:auto;
+            max-width: auto;
         }
 
         .table-button-element {
@@ -46,7 +47,7 @@
         /*Style for the main page*/
         main{
             margin: 20px auto;
-            text-align: center; 
+            text-align: left;
         }
         th, td{
             border-collapse: collapse;
@@ -61,9 +62,9 @@
         }
 
         td {
-            width: 200px;
-            min-width: 125px;
-            max-width: 200px;
+            width: auto;
+            min-width: auto;
+            max-width: auto;
         }
     </style>
 </head>
@@ -83,7 +84,7 @@
         </div>
     </nav>
     <main>
-        <h2>Our Sales Associates</h2>
+        <h2 class="h2">Our Sales Associates</h2>
         <p><%= locals.editTableText %></p>
         <table id="employeeTable" id="table" class="table">
             <thead>
@@ -221,11 +222,11 @@
         <p><%= locals.addEmployeeText %></p>
         <form method="POST" action="/adminAssociates/add_employee">
             <label class="center-label">Name</label>
-            <input type="text" id="name_input" name="name_input"><br>
+            <input placeholder="Enter Employee Here" type="text" id="name_input" name="name_input"><br>
             <label class="center-label">Username</label>
-            <input type="text" id="username_input" name="username_input"><br>
+            <input placeholder="Enter Username Here" type="text" id="username_input" name="username_input"><br>
             <label class="center-label">Password</label>
-            <input type="password" id="password_input" name="password_input"><br>
+            <input placeholder="Enter Password Here" type="password" id="password_input" name="password_input"><br>
             <button type="submit">Add New Employee</button>
         </form>
 
