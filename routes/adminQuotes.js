@@ -6,7 +6,7 @@ const mysql = require('mysql2');
 // Open database
 let db = new sqlite3.Database('database/mydatabase.db');
 
-function getEmployees() {
+async function getEmployees() {
     return new Promise((resolve, reject) => {
         db.all(`SELECT * FROM employee WHERE isAdmin = 0`, (err, rows) => {
             if (err) {
@@ -40,6 +40,10 @@ router.get("/", async (req, res) => {
             const status = req.query.status || "all";
             const selectedAssociate = req.query.associate || "all";
             const selectedCustomer = req.query.customer || "all";
+
+            let quotes = await getQuotes(startDate, endDate, status, selectedAssociate, selectedCustomer);
+
+            console.log(quotes)
         
             connection.query(
             'SELECT * FROM `customers`',
@@ -50,7 +54,7 @@ router.get("/", async (req, res) => {
                     return;
                 }
     
-                res.render("adminQuotes", {loggedOn: true, username: session.username, associates: associates, customers: results, startDate: startDate, endDate: endDate, status: status, selectedAssociate: selectedAssociate, selectedCustomer: selectedCustomer});
+                res.render("adminQuotes", {loggedOn: true, username: session.username, associates: associates, customers: results, startDate: startDate, endDate: endDate, status: status, selectedAssociate: selectedAssociate, selectedCustomer: selectedCustomer, quotes: quotes});
             });
 
         } catch(error) {
@@ -60,6 +64,50 @@ router.get("/", async (req, res) => {
         
     }
 });
+
+
+function getQuotes(startDate, endDate, status, employeeID, customerID) {
+    return new Promise((resolve, reject) => {
+        let sql = 'SELECT * FROM quote';
+
+        if (startDate !== 'all' && endDate !== 'all') {
+            sql += ` WHERE dateCreated BETWEEN '${startDate}' AND '${endDate}'`;
+        }
+
+        if (status !== 'all') {
+            if (sql.includes('WHERE')) {
+                sql += ` AND status='${status}'`;
+            } else {
+                sql += ` WHERE status='${status}'`;
+            }
+        }
+
+        if (employeeID !== 'all') {
+            if (sql.includes('WHERE')) {
+                sql += ` AND employeeID='${employeeID}'`;
+            } else {
+                sql += ` WHERE employeeID='${employeeID}'`;
+            }
+        }
+
+        if (customerID !== 'all') {
+            if (sql.includes('WHERE')) {
+                sql += ` AND customerID='${customerID}'`;
+            } else {
+                sql += ` WHERE customerID='${customerID}'`;
+            }
+        }
+
+        //console.log(sql);
+        db.all(sql, (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
 
 
 

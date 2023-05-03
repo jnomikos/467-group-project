@@ -87,7 +87,7 @@
     <main>
         <h2 class="h2">Our Sales Associates</h2>
         <p><%= locals.editTableText %></p>
-        <table id="employeeTable" id="table" class="table">
+        <table id="employeeTable" id="table" class="table table-hover table-responsive table-striped shadow-lg p-3 mb-5">
             <thead>
                 <th scope="col">ID</th>
                 <th scope="col">Username</th>
@@ -209,8 +209,28 @@
                             </button>
                             </form>
                         </td>
-                        <td class="no-border table-button-element"><button onclick="confirmRemoveEmployee('<%= locals.employees[i].employeeID %>', '<%= locals.employees[i].name %>')" href="#" class="btn btn-danger btn-sm">
-                            <span class="glyphicon glyphicon-remove-circle"></span> Remove
+                        <td class="no-border table-button-element">
+                            <!-- Modal -->
+                            <div class="modal fade" id="removeModal" tabindex="-1" aria-labelledby="removeModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h5 class="modal-title" id="removeModalLabel">Fire <%= locals.employees[i].name %>?</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                    Are you sure you want to fire <%= locals.employees[i].name %>? This action is irreversible.
+                                    </div>
+                                    <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" onclick="confirmRemoveEmployee('<%= locals.employees[i].employeeID %>', '<%= locals.employees[i].name %>')" class="btn btn-danger">Fire them!</button>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+
+                            <button href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#removeModal">
+                            <span class="glyphicon glyphicon-remove-circle"></span> Fire!
                         </button>
                         </td>
                     <% } %>
@@ -234,24 +254,24 @@
 
         <script>
             function confirmRemoveEmployee(employeeID, employeeName) {
-                if (confirm("Are you sure you want to remove the employee " + employeeName + "?") == true) {
-                    // create a new XMLHttpRequest object
-                    let xhr = new XMLHttpRequest();
-                    // Send a post request via javascript
-                    xhr.open("POST", "/adminAssociates/remove_employee", true);
-                    xhr.setRequestHeader("Content-Type", "application/json");
-                    let payload = {employeeID: employeeID};
-                    xhr.send(JSON.stringify(payload));
+                
+                // create a new XMLHttpRequest object
+                let xhr = new XMLHttpRequest();
+                // Send a post request via javascript
+                xhr.open("POST", "/adminAssociates/remove_employee", true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+                let payload = {employeeID: employeeID};
+                xhr.send(JSON.stringify(payload));
 
-                    // Handle the response from the server
-                    xhr.onreadystatechange = function() {
-                        if (xhr.readyState == 4 && xhr.status == 200) {
-                            // Reload the page to update the table
-                            location.reload();
-                        }
-                    };
+                // Handle the response from the server
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        // Reload the page to update the table
+                        location.reload();
+                    }
+                };
                   
-                }
+                
             }
 
             $(function() {

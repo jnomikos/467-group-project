@@ -84,6 +84,8 @@
         </div>
     </nav>
     <main>
+
+          
         <form method="GET" action="/adminQuotes" id="searchForm">
             <h2>List of all quotes:</h2>
               
@@ -93,7 +95,7 @@
             <label for="end">End date:</label>
             <input type="date" id="end" name="endDate" value="<%= locals.endDate %>" min="<%= locals.startDate %>">
             <br>
-
+            <br>
             <label for="status">Status:</label>
             <select name="status" id="status" size="1">
                 <option value="all" <%= locals.status === 'all' ? 'selected' : '' %>>All</option>
@@ -132,8 +134,36 @@
                 <% }%>
             </select>
         </form>
+        <br>
+        <table id="quoteTable" id="table" class="table table-hover table-responsive table-striped shadow-lg p-3 mb-5">
+            <thead>
+                <th scope="col">#</th>
+                <th scope="col">Date</th>
+                <th scope="col">Associate</th>
+                <th scope="col">Customer</th>
+                <th scope="col">Price</th>
+                <th scope="col">Status</th>
+                <th scope="col">Details</th>
+            </thead>
+            
+            <%for(let i = 0; i < locals.quotes.length; i++) { %>
+                <tr>
+                    <td><%=locals.quotes[i].quoteID%></td>
+                    <td><%=locals.quotes[i].dateCreated%></td>
+                    <%if(locals.associates.find(o => o.employeeID == locals.quotes[i].employeeID)) {%>
+                    <td><%=locals.associates.find(o => o.employeeID == locals.quotes[i].employeeID)?.name%></td>
+                    <% } else { %>
+                        <td><%="Fired employee!"%></td>
+                    <% }%>
+                    <td><%=locals.customers.find(o => o.id == locals.quotes[i].customerID)?.name %></td>
+                    <td><%=locals.quotes[i].price%></td>
+                    <td><%=locals.quotes[i].status%></td>
+                    <td></td>
+                </tr>
 
-
+            <% } %>
+            
+        </table>
 
         <script>
             const searchForm = document.getElementById('searchForm');
