@@ -41,10 +41,9 @@ router.post("/finalizeQuote", (req, res) => {
     const paymentInfo = req.body.paymentInfo;
     const price = req.body.price;
     const description = req.body.description;
-    const discount = req.body.discount;
-    const finalPrice = req.body.finalPrice;
+    const status = finalized;
 
-    let query = `UPDATE quote SET customerID = "${customerID}", employeeID = "${employeeID}", customerEmail = "${customerEmail}", paymentInfo = "${paymentInfo}", price = "${price}", description = "${description}", discount = "${discount}", finalPrice = "${finalPrice}" WHERE quoteID = "${quoteID}"`;
+    let query = `UPDATE quote SET customerID = "${customerID}", employeeID = "${employeeID}", customerEmail = "${customerEmail}", paymentInfo = "${paymentInfo}", price = "${price}", description = "${description}", status = "${status}" WHERE quoteID = "${quoteID}"`;
     db.all(query, (err, rows) => {
         if (err) {
             console.log(err);
