@@ -16,9 +16,12 @@ const express = require('express');
 const router = express.Router();
 const sqlite3 = require('sqlite3').verbose();
 const mysql = require('mysql2');
+
+
+// Open database
 let db = new sqlite3.Database('database/mydatabase.db');
 
-router.get("/convertQuote", (req, res) => {
+router.get("/", (req, res) => {
     console.log("Convert Quote");
         db.all(`SELECT * FROM quote`, (err, rows) => {
             if (err) {

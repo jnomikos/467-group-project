@@ -20,6 +20,7 @@ CREATE TABLE quote (
   paymentInfo VARCHAR(50) NOT NULL,
   price INTEGER NOT NULL,
   description VARCHAR(50) NOT NULL,
+  dateCreated DATE NOT NULL,
   status VARCHAR(50) DEFAULT('unresolved') NOT NULL,
   FOREIGN KEY (employeeID) REFERENCES employee(employeeID)
 );

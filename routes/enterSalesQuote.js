@@ -54,10 +54,7 @@ router.post("/", (req, res) => {
     });
 
     //redirect to finalize sales quote page
-    res.redirect("/finalizeSalesQuote");
+    res.redirect("/finalizeQuote");
 });
 
-
-
 module.exports = router;
-
