@@ -60,5 +60,12 @@ app.use('/adminQuotes', adminQuotesRouter);
 const finalizeRouter = require('./routes/finalizeQuote');
 app.use('/finalizeQuote', finalizeRouter);
 
-// Choose what port the server will be on. If running this on your local machine, type localhost:3000 in your browser
-app.listen(3000);
+
+if (process.argv[2] && process.argv[2] === '-p') {
+    console.log("-p flag given. Running http server")
+    app.listen(80);
+} else {
+    console.log('Running on localhost:3000');
+    app.listen(3000);
+}
+  
