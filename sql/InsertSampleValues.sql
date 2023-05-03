@@ -10,8 +10,6 @@ INSERT INTO employee(name, username, password, address, city, state, contact, co
 
 
 INSERT INTO quote(quoteID, customerID, employeeID, customerEmail, paymentInfo, price, description, dateCreated) VALUES 
-(1, 1, 1, 'email@email.com', 'Credit Card', 100, 'This is a description', 2023-04-13),
-(2, 2, 2, 'email@email.com', 'Credit Card', 100, 'This is a description',2022-06-13),
-(3, 3, 3, 'email@email.com', 'Credit Card', 100, 'This is a description', 2023-01-10),
-(4, 4, 4, 'email@email.com', 'Credit Card', 100, 'This is a description',2023-05-11),
-(5, 5, 5, 'email@email.com', 'Credit Card', 100, 'This is a description', 2023-03-11)
+(1, 1, 3, 'quote@email.com', 'Credit Card', 100, 'This is a description', '2023-04-13'),
+(2, 2, 4, 'email@email.com', 'Credit Card', 100, 'This is a description','2023-05-02'),
+(3, 3, 5, 'email@email.com', 'Credit Card', 100, 'This is a description', '2023-01-10')
