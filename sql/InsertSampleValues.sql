@@ -9,9 +9,9 @@ INSERT INTO employee(name, username, password, address, city, state, contact, co
 ('John Doe', 'JohnIsAwesome', 'password', '1234 North St', 'Dekalb', 'IL', '156-456-3645', 10);
 
 
-INSERT INTO quote(quoteID, customerID, employeeID, customerEmail, paymentInfo, price, description) VALUES 
-(1, 1, 1, 'Credit Card', 100, 'email@email.com', 'This is a description'),
-(2, 2, 2, 'Credit Card', 100, 'email@email.com', 'This is a description'),
-(3, 3, 3, 'Credit Card', 100, 'email@email.com', 'This is a description'),
-(4, 4, 1, 'Credit Card', 100, 'email@email.com', 'This is a description'),
-(5, 5, 2, 'Credit Card', 100, 'email@email.com', 'This is a description');
+INSERT INTO quote(quoteID, customerID, employeeID, customerEmail, paymentInfo, price, description, dateCreated) VALUES 
+(1, 1, 1, 'email@email.com', 'Credit Card', 100, 'This is a description', 2023-04-13),
+(2, 2, 2, 'email@email.com', 'Credit Card', 100, 'This is a description',2022-06-13),
+(3, 3, 3, 'email@email.com', 'Credit Card', 100, 'This is a description', 2023-01-10),
+(4, 4, 4, 'email@email.com', 'Credit Card', 100, 'This is a description',2023-05-11),
+(5, 5, 5, 'email@email.com', 'Credit Card', 100, 'This is a description', 2023-03-11)
