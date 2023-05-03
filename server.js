@@ -57,9 +57,13 @@ app.use('/adminAssociates', adminAssociatesRouter);
 const adminQuotesRouter = require('./routes/adminQuotes');
 app.use('/adminQuotes', adminQuotesRouter);
 
+// Finalize quote page
 const finalizeRouter = require('./routes/finalizeQuote');
 app.use('/finalizeQuote', finalizeRouter);
-
+  
+// Processing order page
+const processRouter = require('./routes/convertQuote');
+app.use('/convertQuote', processRouter);
 
 if (process.argv[2] && process.argv[2] === '-p') {
     console.log("-p flag given. Running http server")
@@ -68,4 +72,3 @@ if (process.argv[2] && process.argv[2] === '-p') {
     console.log('Running on localhost:3000');
     app.listen(3000);
 }
-  
