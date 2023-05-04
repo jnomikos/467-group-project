@@ -25,6 +25,9 @@ router.get("/", async (req, res) => {
         const employee = await getLoggedEmployee(session);
         console.log(employee)
 
+        const quotes = await getQuotes(employee[0].employeeID);
+        let customerNames = [];
+        console.log(quotes)
         connection.query(
         'SELECT * FROM `customers`',
         function(err, results, fields) {
@@ -34,11 +37,16 @@ router.get("/", async (req, res) => {
                 return;
             }
 
+            for(let i = 0; i < results.length; i++) {
+                customerNames.push(results[i].name);
+            }
 
-            res.render("enterQuote", {loggedOn: true, username: session.username, customers: results, employee: employee[0]});
+
+            res.render("enterQuote", {loggedOn: true, username: session.username, customers: results, customerNames: customerNames, employee: employee[0], quotes: quotes});
         });
     }
 });
+
 
 //allow employees to enter sales quotes
 router.post("/enter_quote", (req, res) => {
@@ -48,7 +56,6 @@ router.post("/enter_quote", (req, res) => {
     const paymentInfo = req.body.customerPaymentInfo;
     const price = req.body.price;
     const description = req.body.description;
-    const status = "sanctioned";
 
     console.log(employeeID);
 
@@ -69,11 +76,56 @@ router.post("/enter_quote", (req, res) => {
             }
 
 
-            db.run(`INSERT INTO quote (customerID, employeeID, customerEmail, paymentInfo, price, description, status, dateCreated) VALUES ("${results[0].id}", "${employeeID}", "${customerEmail}", "${paymentInfo}", "${price}", "${description}", "${status}", "${formattedDate}")`, (err) => {
+            db.run(`INSERT INTO quote (customerID, employeeID, customerEmail, paymentInfo, price, description, dateCreated) VALUES ("${results[0].id}", "${employeeID}", "${customerEmail}", "${paymentInfo}", "${price}", "${description}", "${formattedDate}")`, (err) => {
                 if (err) {
                     console.log(err);
-                    res.redirect("/enterSalesQuote");
+                    res.redirect("/");
                 }
+            });
+
+
+        }
+    );
+
+    res.redirect("/enterSalesQuote");
+});
+
+//allow employees to enter sales quotes
+router.post("/finalize_quote", (req, res) => {
+    const customerName = req.body.customerName;
+    const employeeID = req.body.employeeID;
+    const quoteID = req.body.quoteID;
+    const customerEmail = req.body.customerEmail;
+    const paymentInfo = req.body.customerPaymentInfo;
+    const price = req.body.price;
+    const description = req.body.description;
+    const status = "Finalized";
+
+    console.log(employeeID);
+
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Month is zero-indexed, so we add 1 and pad with '0'
+    const day = String(currentDate.getDate()).padStart(2, '0'); // Pad with '0' if needed
+
+    const formattedDate = `${year}-${month}-${day}`;
+    console.log("price: " + price)
+    console.log("Customer name: " + customerName)
+    connection.query(
+        `SELECT * FROM \`customers\` WHERE \`name\` = '${customerName}'`,
+        function(err, results, fields) {
+            if(err || results.length == 0) {
+                console.error(err);
+                res.redirect('/');
+                return;
+            }
+
+            let query = `UPDATE quote SET customerEmail = "${customerEmail}", paymentInfo = "${paymentInfo}", price = "${price}", description = "${description}", status = "${status}" WHERE quoteID = "${quoteID}"`;
+            db.all(query, (err, rows) => {
+                if (err) {
+                    console.log(err);
+                }
+                res.render("finalizeQuote", {rows: rows});
             });
 
 
@@ -89,6 +141,19 @@ async function getLoggedEmployee(session) {
     console.log(session.username)
     return new Promise((resolve, reject) => {
         db.all(`SELECT * FROM employee WHERE isAdmin = 0 AND username = '${session.username}'`, (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
+
+async function getQuotes(employeeID) {
+    console.log(employeeID)
+    return new Promise((resolve, reject) => {
+        db.all(`SELECT * FROM quote WHERE employeeID = '${employeeID}' AND status = 'unresolved'`, (err, rows) => {
             if (err) {
                 reject(err);
             } else {

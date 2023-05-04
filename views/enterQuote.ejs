@@ -34,30 +34,162 @@
     </nav>
 	<!-- The content of the website -->
 	<h2>Create a New Quote For Customer:</h2>
-	<form action="/enterSalesQuote/enter_quote" method="post">
+	<form id="EnterQuoteForm" action="" method="post">
 		<label>Select customer:</label>
-		<select name="customerName" id="customerName">
+		<select name="customerName" id="customerName">connection
 			<% for(let i = 0; i < locals.customers.length; i++) { %>
 				<option id="customerName" value="<%=locals.customers[i].name%>"><%=locals.customers[i].name%></option>
 			<%}%>
 		</select>
-		<!--create a new line-->
-		<br>
-		<label>Customer Email:</label>
-		<input type="text" name="customerEmail" id="customerEmail" placeholder="Customer Email">
-		<br>
-		<label>Customer Payment Info:</label>
-		<input type="text" name="customerPaymentInfo" id="customerPaymentInfo" placeholder="Customer Payment Info">
-		<br>
-		<label>Price:</label>
-		<input type="text" name="price" id="price" placeholder="Price">
-		<br>
-		<label>Description:</label>
-		<input type="text" name="description" id="description" placeholder="Description">
-		<br>
-		<input type="hidden" name="employeeID" value="<%= locals.employee.employeeID%>">
-		<input type="submit" value="Submit">
+		
+		<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newQuoteModal">
+			New Quote
+		</button>
+		  
+		  <!-- Modal -->
+		  <div class="modal fade" id="newQuoteModal" tabindex="-1" aria-labelledby="newQuoteModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+			  <div class="modal-content">
+				<div class="modal-header">
+				  <h1 class="modal-title fs-5" id="newQuoteModalLabel">Enter Sales Quote</h1>
+				  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<!--create a new line-->
+					<br>
+					<label>Customer Email:</label>
+					<input type="text" name="customerEmail" id="customerEmail" placeholder="Customer Email">
+					<br>
+					<label>Customer Payment Info:</label>
+					<input type="text" name="customerPaymentInfo" id="customerPaymentInfo" placeholder="Customer Payment Info">
+					<br>
+					<label>Price:</label>
+					<input type="text" name="price" id="price" placeholder="Price">
+					<br>
+					<label>Description:</label>
+					<input type="text" name="description" id="description" placeholder="Description">
+					<br>
+					<input type="hidden" name="employeeID" value="<%= locals.employee.employeeID%>">
+				</div>
+				<div class="modal-footer">
+				  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				  <button type="button" id="Create" class="btn btn-primary enter-quote-button">Create Quote</button>
+				  <button type="button" class="btn btn-primary finalize-quote-button">Finalize Quote</button>
+				</div>
+			  </div>
+			</div>
+		  </div>
+		  
 	</form>	
 	<p></p>
+
+	<h2>List of current quotes:</h2>
+
+	<% for(let i = 0; i < locals.quotes.length; i++) { %>
+		<form id="EditQuoteForm<%=i%>" name="EditQuoteForm<%=i%>" action="" method="post">
+			<div class="card">
+				<div class="card-body">
+					<h5 class="card-title">Quote <%= locals.quotes[i].quoteID %></h5>
+					<h6 class="card-subtitle mb-2 text-muted">Customer: <%= locals.quotes[i].name %></h6>
+					<p class="card-text">Description: <%= locals.quotes[i].description %></p>
+					<p class="card-text">Total: $<%= locals.quotes[i].price %></p>
+					<p class="card-text">Date: <%= locals.quotes[i].dateCreated %></p>
+					<p class="card-text">Customer Email: <%= locals.quotes[i].customerEmail %></p>
+					<p class="card-footer">
+						<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editQuoteModal<%=i%>">
+						Edit Quote
+						</button>
+						<button type="button" class="btn btn-secondary finalize-quote-button">
+							Finalize Quote
+						</button>
+					</p>
+
+
+				</div>
+			</div>
+			<br>
+			  <!-- Modal -->
+			  <div class="modal fade" id="editQuoteModal<%=i%>" tabindex="-1" aria-labelledby="editQuoteModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+				  <div class="modal-content">
+					<div class="modal-header">
+					  <h1 class="modal-title fs-5" id="editQuoteModalLabel">Enter Sales Quote</h1>
+					  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<!--create a new line-->
+						<br>
+						<label>Customer Email:</label>
+						<input type="text" name="customerEmail" id="customerEmail" placeholder="Customer Email" value="<%= locals.quotes[i].customerEmail %>">
+						<br>
+						<label>Customer Payment Info:</label>
+						<input type="text" name="customerPaymentInfo" id="customerPaymentInfo" placeholder="Customer Payment Info" value="<%= locals.quotes[i].paymentInfo %>">
+						<br>
+						<label>Price:</label>
+						<input type="text" name="price" id="price" placeholder="Price" value="<%= locals.quotes[i].price %>">
+						<br>
+						<label>Description:</label>
+						<input type="text" name="description" id="description" placeholder="Description" value="<%= locals.quotes[i].description %>">
+						<br>
+						<input type="hidden" name="employeeID" value="<%= locals.employee.employeeID%>">
+						<input type="hidden" name="customerName" value="<%= locals.customerNames[i] %>">
+						<input type="hidden" name="quoteID" value="<%= locals.quotes[i].quoteID %>">
+						
+					</div>
+					<div class="modal-footer">
+					  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					  <button type="button" class="btn btn-primary update-quote-button">Update</button>
+					  <button type="button" class="btn btn-primary finalize-quote-button">Finalize Quote</button>
+					</div>
+				  </div>
+				</div>
+			  </div>
+		</form>
+	<% } %>
+
+
+	<script>
+
+		document.addEventListener("DOMContentLoaded", function(event) {
+		
+			const forms = document.querySelectorAll("form");
+
+			forms.forEach(function(form) {
+
+				const enterQuoteButtons = document.querySelectorAll(".enter-quote-button");
+
+				const finalizeQuoteButtons = document.querySelectorAll(".finalize-quote-button");
+
+				const updateQuoteButtons = document.querySelectorAll(".update-quote-button");
+
+				for (let i = 0; i < enterQuoteButtons.length; i++) {
+					enterQuoteButtons[i].addEventListener("click", function(event) {
+						event.preventDefault(); // prevent default form submission behavior
+						form.action = "/enterSalesQuote/enter_quote"; // set action to endpoint 1
+						form.submit(); // submit the form
+					});
+				}
+
+				for (let i = 0; i < finalizeQuoteButtons.length; i++) {
+					finalizeQuoteButtons[i].addEventListener("click", function(event) {
+						event.preventDefault(); // prevent default form submission behavior
+						form.action = "/enterSalesQuote/finalize_quote"; // set action to endpoint 2
+						form.submit(); // submit the form
+					});
+				}
+
+				for (let i = 0; i < updateQuoteButtons.length; i++) {
+					updateQuoteButtons[i].addEventListener("click", function(event) {
+						event.preventDefault(); // prevent default form submission behavior
+						form.action = "/enterSalesQuote/update_quote"; // set action to endpoint 2
+						form.submit(); // submit the form
+					});
+				}
+			});
+			
+		});
+
+		
+	</script>
 </body>
 </html>
