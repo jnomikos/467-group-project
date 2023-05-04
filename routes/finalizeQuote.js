@@ -16,19 +16,19 @@ const sqlite3 = require('sqlite3').verbose();
 const mysql = require('mysql2');
 let db = new sqlite3.Database('database/mydatabase.db');
 
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
     console.log("Finalize Quote");
     let session = req.session;
     if(!session.username){
         res.redirect('/');
-    } else {
-        db.all(`SELECT * FROM quote WHERE status = 'sanctioned'`, (err, rows) => {
-            if (err) {
-                console.log(err);
-            }
-            res.render("finalizeQuote", {rows: rows});
-        }
-    );
+    } else{
+        const employee = await getLoggedEmployee(session);
+        console.log(employee);
+
+        let quotes = await grabQuotes(employee[0].employeeID);
+        console.log(quotes);
+
+        res.render("finalizeQuote", {loggedOn: true, username: session.username, employee: employee[0], quotes: quotes});
     }
 });
 
@@ -67,5 +67,31 @@ router.get('/logout',(req,res) => {
     req.session.destroy();
     res.redirect('/');
 });
+
+async function grabQuotes(employeeID) {
+    console.log(employeeID)
+    return new Promise((resolve, reject) => {
+        db.all(`SELECT * FROM quote WHERE employeeID = '${employeeID}' AND status = 'Finalized'`, (err, rows) => {
+            if(err){
+                reject(err);
+            }else{
+                resolve(rows);
+            }
+        });
+    });
+}
+
+async function getLoggedEmployee(session) {
+    console.log(session.username)
+    return new Promise((resolve, reject) => {
+        db.all(`SELECT * FROM employee WHERE isAdmin = 0 AND username = '${session.username}'`, (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
 
 module.exports = router;
