@@ -22,7 +22,7 @@ router.get("/", (req, res) => {
     if(!session.username){
         res.redirect('/');
     } else {
-        db.all(`SELECT * FROM quote WHERE status = sanctioned`, (err, rows) => {
+        db.all(`SELECT * FROM quote WHERE status = 'sanctioned'`, (err, rows) => {
             if (err) {
                 console.log(err);
             }

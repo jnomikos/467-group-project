@@ -23,7 +23,7 @@ let db = new sqlite3.Database('database/mydatabase.db');
 
 router.get("/", (req, res) => {
     console.log("Convert Quote");
-        db.all(`SELECT * FROM quote where status = finalized`, (err, rows) => {
+        db.all(`SELECT * FROM quote where status = 'finalized'`, (err, rows) => {
             if (err) {
                 console.log(err);
             }
