@@ -23,11 +23,14 @@ router.get("/", async (req, res) => {
     } else {
         
         const employee = await getLoggedEmployee(session);
-        console.log(employee)
 
         const quotes = await getQuotes(employee[0].employeeID);
+
+        const lineItems = await getLineItems();
+
+        const editQuote = req.query.editQuoteID || "-1";
+
         let customerNames = [];
-        console.log(quotes)
         connection.query(
         'SELECT * FROM `customers`',
         function(err, results, fields) {
@@ -42,7 +45,7 @@ router.get("/", async (req, res) => {
             }
 
 
-            res.render("enterQuote", {loggedOn: true, username: session.username, customers: results, customerNames: customerNames, employee: employee[0], quotes: quotes});
+            res.render("enterQuote", {loggedOn: true, username: session.username, customers: results, customerNames: customerNames, employee: employee[0], quotes: quotes, lineItems: lineItems, editQuote: editQuote});
         });
     }
 });
@@ -54,7 +57,6 @@ router.post("/enter_quote", (req, res) => {
     const employeeID = req.body.employeeID;
     const customerEmail = req.body.customerEmail;
     const paymentInfo = req.body.customerPaymentInfo;
-    const price = req.body.price;
     const description = req.body.description;
 
     console.log(employeeID);
@@ -65,6 +67,7 @@ router.post("/enter_quote", (req, res) => {
     const day = String(currentDate.getDate()).padStart(2, '0'); // Pad with '0' if needed
 
     const formattedDate = `${year}-${month}-${day}`;
+
 
     connection.query(
         `SELECT * FROM \`customers\` WHERE \`name\` = '${customerName}'`,
@@ -76,22 +79,62 @@ router.post("/enter_quote", (req, res) => {
             }
 
 
-            db.run(`INSERT INTO quote (customerID, employeeID, customerEmail, paymentInfo, price, description, dateCreated) VALUES ("${results[0].id}", "${employeeID}", "${customerEmail}", "${paymentInfo}", "${price}", "${description}", "${formattedDate}")`, (err) => {
+            db.run(`INSERT INTO quote (customerID, employeeID, customerEmail, paymentInfo, description, dateCreated) VALUES ("${results[0].id}", "${employeeID}", "${customerEmail}", "${paymentInfo}", "${description}", "${formattedDate}")`, (err) => {
                 if (err) {
                     console.log(err);
                     res.redirect("/");
+                } else {
+                    res.redirect("/enterSalesQuote");
                 }
             });
-
-
         }
     );
 
-    res.redirect("/enterSalesQuote");
+});
+
+
+//allow employees to update sales quotes
+router.post("/update_quote", (req, res) => {
+    const quoteID = req.body.quoteID;
+    const customerEmail = req.body.customerEmail || "";
+    const description = req.body.description || "";
+    const discount = req.body.discount || 0;
+
+    console.log(req.body);
+
+    //const lineItemProperties = Object.keys(req.body).filter(prop => prop.startsWith('lineItem'));
+    const itemPriceProperties = Object.keys(req.body).filter(prop => prop.startsWith('itemPrice'));
+
+    //console.log(lineItemProperties);
+    console.log(itemPriceProperties);
+
+    let total = 0;
+
+    for(let x = 0; x < itemPriceProperties.length; x++) {
+        //const lineItem = req.body[lineItemProperties[x]];
+        const linePrice = req.body[itemPriceProperties[x]];
+
+        total += parseInt(linePrice);
+    }
+
+
+
+    db.run(`UPDATE quote SET description = "${description}", price = "${total}", customerEmail = "${customerEmail}", discount="${discount}" WHERE quoteID = "${quoteID}"`, (err) => {
+        if (err) {
+            console.log(err);
+            res.redirect("/");
+        } else {
+            res.redirect("/enterSalesQuote");
+        }
+    });
+
+    
+
 });
 
 //allow employees to enter sales quotes
 router.post("/finalize_quote", (req, res) => {
+    console.log("FINALIZE")
     const customerName = req.body.customerName;
     const employeeID = req.body.employeeID;
     const quoteID = req.body.quoteID;
@@ -100,8 +143,10 @@ router.post("/finalize_quote", (req, res) => {
     const price = req.body.price;
     const description = req.body.description;
     const status = "Finalized";
+    
 
-    console.log(employeeID);
+    console.log("BODY")
+    console.log(req.body);
 
     const currentDate = new Date();
     const year = currentDate.getFullYear();
@@ -109,8 +154,7 @@ router.post("/finalize_quote", (req, res) => {
     const day = String(currentDate.getDate()).padStart(2, '0'); // Pad with '0' if needed
 
     const formattedDate = `${year}-${month}-${day}`;
-    console.log("price: " + price)
-    console.log("Customer name: " + customerName)
+
     connection.query(
         `SELECT * FROM \`customers\` WHERE \`name\` = '${customerName}'`,
         function(err, results, fields) {
@@ -125,16 +169,47 @@ router.post("/finalize_quote", (req, res) => {
                 if (err) {
                     console.log(err);
                 }
-                res.render("finalizeQuote", {rows: rows});
+                else { res.redirect('/finalizeQuote'); }
             });
 
 
         }
     );
-
-    //redirect to finalize sales quote page
-    res.redirect("/finalizeQuote");
 });
+
+router.post("/insert_line_item", (req, res) => {
+    const quoteID = req.body.quoteID;
+    const price = req.body.newLinePrice;
+    const description = req.body.newLineDescription;
+
+    console.log("QUOTE ID: " + quoteID)
+    console.log("PRICE: " + price);
+    console.log("DESCRIPTION: " + description);
+
+    db.run(`INSERT INTO lineItems (quoteID, price, description) VALUES ("${quoteID}", "${price}", "${description}")`, (err) => {
+        if (err) {
+            console.log(err);
+            res.redirect("/");
+        }
+    });
+
+    res.redirect("/enterSalesQuote?editQuoteID=" + quoteID);
+});
+
+
+
+async function getLineItems() {
+    return new Promise((resolve, reject) => {
+        db.all(`SELECT * FROM lineItems`, (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
+
 
 
 async function getLoggedEmployee(session) {

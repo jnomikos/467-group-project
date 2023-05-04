@@ -21,6 +21,7 @@ app.use(express.urlencoded({ extended: true }))
 // Allow you to parse JSON info from body
 app.use(express.json());
 
+
 // Sets our view engine for express which is ejs.
 app.set('view engine', 'ejs');
 
