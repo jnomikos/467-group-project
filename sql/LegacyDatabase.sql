@@ -18,9 +18,19 @@ CREATE TABLE quote (
   employeeID INTEGER NOT NULL,
   customerEmail VARCHAR(50) NOT NULL,
   paymentInfo VARCHAR(50) NOT NULL,
-  price INTEGER NOT NULL,
+  price INTEGER NOT NULL DEFAULT(0),
   description VARCHAR(50) NOT NULL,
   dateCreated DATE NOT NULL,
+  discount INTEGER DEFAULT(0),
   status VARCHAR(50) DEFAULT('unresolved') NOT NULL,
   FOREIGN KEY (employeeID) REFERENCES employee(employeeID)
+);
+
+
+CREATE TABLE lineItems (
+  lineItemID INTEGER PRIMARY KEY AUTOINCREMENT,
+  quoteID INTEGER NOT NULL,
+  price INTEGER NOT NULL DEFAULT(0),
+  description VARCHAR(50) NOT NULL,
+  FOREIGN KEY (quoteID) REFERENCES quote(quoteID)
 );

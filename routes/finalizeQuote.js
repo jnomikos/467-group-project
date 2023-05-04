@@ -32,37 +32,6 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.post("/finalizeQuote", (req, res) => {
-    console.log("Finalize Quote");
-    const quoteID = req.body.quoteID;
-    const customerID = req.body.customerID;
-    const employeeID = req.body.employeeID;
-    const customerEmail  = req.body.customerEmail;
-    const paymentInfo = req.body.paymentInfo;
-    const price = req.body.price;
-    const description = req.body.description;
-    const status = 'Finalized';
-
-    // Log all of the const variables console.log
-    console.log(quoteID);
-    console.log(customerID);
-    console.log(employeeID);
-    console.log(customerEmail);
-    console.log(paymentInfo);
-    console.log(price);
-    console.log(description);
-    console.log(status);
-    
-
-    let query = `UPDATE quote SET customerID = "${customerID}", employeeID = "${employeeID}", customerEmail = "${customerEmail}", paymentInfo = "${paymentInfo}", price = "${price}", description = "${description}", status = "${status}" WHERE quoteID = "${quoteID}"`;
-    db.all(query, (err, rows) => {
-        if (err) {
-            console.log(err);
-        }
-        res.render("finalizeQuote", {rows: rows});
-    });
-});
-
 router.get('/logout',(req,res) => {
     req.session.destroy();
     res.redirect('/');
