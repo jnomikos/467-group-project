@@ -171,8 +171,6 @@ router.post("/finalize_quote", (req, res) => {
                 }
                 else { res.redirect('/finalizeQuote'); }
             });
-
-
         }
     );
 });
@@ -194,8 +192,7 @@ router.post("/insert_line_item", (req, res) => {
             res.redirect("/enterSalesQuote?editQuoteID=" + quoteID);
         }
     });
-
-    
+   
 });
 
 router.post("/remove_line_item", (req, res) => {

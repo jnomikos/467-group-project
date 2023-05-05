@@ -33,6 +33,9 @@ router.get("/", async (req, res) => {
         let quotes = await takeQuotes(employee[0].employeeID);
         console.log(quotes);
 
+        const lineItems = await getLineItems();
+        console.log(lineItems);
+
         res.render("convertQuote", {loggedOn: true, username: session.username, employee: employee[0], quotes: quotes});
     }
 });
@@ -66,6 +69,18 @@ async function getLoggedEmployee(session) {
     console.log(session.username)
     return new Promise((resolve, reject) => {
         db.all(`SELECT * FROM employee WHERE isAdmin = 0 AND username = '${session.username}'`, (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
+
+async function getLineItems() {
+    return new Promise((resolve, reject) => {
+        db.all(`SELECT * FROM lineItems`, (err, rows) => {
             if (err) {
                 reject(err);
             } else {
