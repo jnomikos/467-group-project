@@ -42,12 +42,12 @@
                   <p class="card-text">Description: <%= locals.quotes[i].description %></p>
                   <p class="card-text">Total: $<%= locals.quotes[i].price %></p>
                   <p class="card-footer">
-                  </p>    
+                  </p>
+                  <button type="submit" class="btn btn-secondary finalize-quote-button">
+                    Sanction Quote
+                  </button> 
               </div>
           </div>  
-          <button type="submit" class="btn btn-secondary finalize-quote-button">
-              Sanction Quote
-          </button>
       </form>  
   <% } %>
 </body>
