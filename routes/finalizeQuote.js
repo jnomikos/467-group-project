@@ -36,6 +36,10 @@ router.get("/", async (req, res) => {
         let quotes = await grabQuotes(employee[0].employeeID);
         console.log(quotes);
 
+        for(let i = 0; i < quotes.length; i++){
+            quotes[i].price = await findPriceTotal(quotes[i].quoteID);
+        }
+
         const editQuote = req.query.editQuoteID || "-1";
         const lineItems = await getLineItems(employee[0].employeeID);
 
@@ -160,6 +164,23 @@ router.get('/logout',(req,res) => {
     req.session.destroy();
     res.redirect('/');
 });
+
+// Find price total (not including discount)
+async function findPriceTotal(quoteID) {
+    return new Promise((resolve, reject) => {
+        let totalAmt = 0;
+        db.all(`SELECT * FROM lineItems WHERE quoteID = '${quoteID}'`, (err, rows) => {
+            if(err){
+                reject(err);
+            }else{
+                for(let i = 0; i < rows.length; i++){
+                    totalAmt += rows[i].price;
+                }
+                resolve(totalAmt);
+            }
+        });
+    });
+}
 
 async function grabQuotes(employeeID) {
     console.log(employeeID)

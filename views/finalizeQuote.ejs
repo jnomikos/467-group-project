@@ -42,7 +42,7 @@
                     <h6 class="card-subtitle mb-2 text-muted">Customer: <%= locals.customerNames[i] %></h6>
                     <p class="card-text">Customer Email: <%= locals.quotes[i].customerEmail %></p>
                     <p class="card-text">Description: <%= locals.quotes[i].description %></p>
-                    <p class="card-text">Total: $<%= locals.quotes[i].price %></p>
+                    <p class="card-text">Total: $<%= locals.quotes[i].price - locals.quotes[i].discount %></p>
                     <p class="card-footer">
                         <form method="GET" action="/finalizeQuote">
                             <input type="hidden" name="editQuoteID" value="<%= locals.quotes[i].quoteID%>">
