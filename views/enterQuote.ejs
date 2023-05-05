@@ -112,15 +112,27 @@
 					</p>
 				<% } else { %>
 					<form id="EditQuoteForm<%=i%>" name="EditQuoteForm<%=i%>" action="/enterSalesQuote/update_quote" method="POST">
+					<% if(locals.failureString.length > 0) { %>
+						<div class="alert alert-danger" role="alert">
+							<% if(locals.failureString == 'invalidEmail') { %>
+								Invalid Email!
+							<% } else if(locals.failureString == 'invalidDiscount') { %>
+								Discount must be a number!
+							<% } %>
+						</div>
+					<% } %>
 					<h5 class="card-title">Quote <%= locals.quotes[i].quoteID %></h5>
 					<h6 class="card-subtitle mb-2 text-muted">Customer: <%= locals.customerNames[i] %></h6>
 					<p class="card-text">Customer Email:</p>
 					<input type="text" name="customerEmail" id="customerEmail" placeholder="Customer Email" value="<%= locals.quotes[i].customerEmail %>">
 					<p class="card-text">Date: <%= locals.quotes[i].dateCreated %></p>
+					<p class="card-text"></p>
 					<p class="card-text">Description:</p>
 					<input type="text" name="description" id="description" placeholder="Description" value="<%= locals.quotes[i].description %>">
+					<p class="card-text"></p>
 					<p class="card-text">Discount:</p>
 					<input type="text" name="discount" id="discount" placeholder="$" value="<%= locals.quotes[i].discount %>">
+					<p class="card-text"></p>
 					<p class="card-text">Items:</p>
 					<table class="table-line-items">
 						<thead>
@@ -154,7 +166,6 @@
 							</div></td></tr>
 						</tbody>
 					</table>
-					<p class="card-text">Total: $<%= locals.quotes[i].price %></p>
 					<input type="hidden" name="employeeID" value="<%= locals.employee.employeeID%>">
 					<input type="hidden" name="customerName" value="<%= locals.customerNames[i] %>">
 					<input type="hidden" name="quoteID" value="<%= locals.quotes[i].quoteID %>">

@@ -30,6 +30,8 @@ router.get("/", async (req, res) => {
 
         const editQuote = req.query.editQuoteID || "-1";
 
+        const failureString = req.query.failure || "";
+
         let customerNames = [];
         connection.query(
         'SELECT * FROM `customers`',
@@ -45,7 +47,7 @@ router.get("/", async (req, res) => {
             }
 
 
-            res.render("enterQuote", {loggedOn: true, username: session.username, customers: results, customerNames: customerNames, employee: employee[0], quotes: quotes, lineItems: lineItems, editQuote: editQuote});
+            res.render("enterQuote", {loggedOn: true, username: session.username, customers: results, customerNames: customerNames, employee: employee[0], quotes: quotes, lineItems: lineItems, editQuote: editQuote, failureString: failureString});
         });
     }
 });
@@ -58,8 +60,6 @@ router.post("/enter_quote", (req, res) => {
     const customerEmail = req.body.customerEmail;
     const paymentInfo = req.body.customerPaymentInfo;
     const description = req.body.description;
-
-    console.log(employeeID);
 
     const currentDate = new Date();
     const year = currentDate.getFullYear();
@@ -100,7 +100,20 @@ router.post("/update_quote", (req, res) => {
     const description = req.body.description || "";
     const discount = req.body.discount || 0;
 
-    console.log(req.body);
+    if(!ValidateEmail(customerEmail)) {
+        console.log("Invalid email");
+        res.redirect(`/enterSalesQuote?editQuoteID=${quoteID}&failure=invalidEmail`);
+        return;
+    }
+
+    if(!ValidateNumber(discount)) {
+        console.log("Invalid discount");
+        res.redirect(`/enterSalesQuote?editQuoteID=${quoteID}&failure=invalidDiscount`);
+        return;
+    }
+
+    console.log("DISCOUNT TYPE")
+    console.log(typeof discount)
 
     //const lineItemProperties = Object.keys(req.body).filter(prop => prop.startsWith('lineItem'));
     const itemPriceProperties = Object.keys(req.body).filter(prop => prop.startsWith('itemPrice'));
@@ -218,6 +231,21 @@ router.post("/remove_line_item", (req, res) => {
     });
 
 });
+
+
+function ValidateEmail(email) 
+{
+
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+        return true;
+    }
+    return false;
+}
+
+// Validates that numeric values are entered
+function ValidateNumber(number) {
+    return /^\d+$/.test(number);
+}
 
 
 
