@@ -41,7 +41,7 @@ router.post("/convertQuote", (req, res) => {
     const paymentInfo = req.body.paymentInfo;
     const price = req.body.price;
     const description = req.body.description;
-    const status = ordered;
+    const status = sanctioned;
 
     let query = `UPDATE quote SET customerID = "${customerID}", employeeID = "${employeeID}", customerEmail = "${customerEmail}", paymentInfo = "${paymentInfo}", price = "${price}", description = "${description}", status = "${status}" WHERE quoteID = "${quoteID}"`;
     db.all(query, (err, rows) => {
