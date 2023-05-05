@@ -182,6 +182,8 @@ router.post("/insert_line_item", (req, res) => {
     const price = req.body.newLinePrice;
     const description = req.body.newLineDescription;
 
+    console.log(req.body)
+
     console.log("QUOTE ID: " + quoteID)
     console.log("PRICE: " + price);
     console.log("DESCRIPTION: " + description);

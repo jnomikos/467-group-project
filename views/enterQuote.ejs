@@ -46,7 +46,6 @@
 			New Quote
 		</button>
 		  
-		<!-- Modal -->
 		<div class="modal fade" id="newQuoteModal" tabindex="-1" aria-labelledby="newQuoteModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -55,7 +54,6 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
-					<!--create a new line-->
 					<br>
 					<label>Customer Email:</label>
 					<input type="text" name="customerEmail" id="customerEmail" placeholder="Customer Email">
@@ -115,61 +113,61 @@
 					</p>
 				<% } else { %>
 					<form id="EditQuoteForm<%=i%>" name="EditQuoteForm<%=i%>" action="/enterSalesQuote/update_quote" method="post">
-					<h5 class="card-title">Quote <%= locals.quotes[i].quoteID %></h5>
-					<h6 class="card-subtitle mb-2 text-muted">Customer: <%= locals.customerNames[i] %></h6>
-					<p class="card-text">Customer Email:</p>
-					<input type="text" name="customerEmail" id="customerEmail" placeholder="Customer Email" value="<%= locals.quotes[i].customerEmail %>">
-					<p class="card-text">Date: <%= locals.quotes[i].dateCreated %></p>
-					<p class="card-text">Description:</p>
-					<input type="text" name="description" id="description" placeholder="Description" value="<%= locals.quotes[i].description %>">
-					<p class="card-text">Discount:</p>
-					<input type="text" name="discount" id="discount" placeholder="$" value="<%= locals.quotes[i].discount %>">
-					<p class="card-text">Items:</p>
-					<table class="table-line-items">
-						<thead>
-							<th scope="col">Description</th>
-							<th scope="col">Price</th>
-							<th scope="col"></th>
-						</thead>
-						<tbody class="item-list">
-							<% for(let j = 0; j < locals.lineItems.length; j++) { %>
-								<%if(locals.lineItems[j].quoteID == locals.quotes[i].quoteID) { %> 
-									<tr>
-										<input type="hidden" name="lineItemID" value="<%= locals.lineItems[j].lineItemID %>">
-										<td><input type="text" name="lineItem<%=j%>" id="lineItem<%=j%>" placeholder="Line Item" value="<%= locals.lineItems[j].description %>"></td>
-										<td><input type="text" pattern="[0-9]*" name="itemPrice<%=j%>" id="itemPrice<%=j%>" placeholder="Line Item Price" value="<%= locals.lineItems[j].price %>"></td>
-										<td><div class="btn-group" role="group" aria-label="Basic mixed styles example">
-											<button class="btn btn-warning removeLineItem">🗑</button>
-										</div></td>
-									</tr>
+						<h5 class="card-title">Quote <%= locals.quotes[i].quoteID %></h5>
+						<h6 class="card-subtitle mb-2 text-muted">Customer: <%= locals.customerNames[i] %></h6>
+						<p class="card-text">Customer Email:</p>
+						<input type="text" name="customerEmail" id="customerEmail" placeholder="Customer Email" value="<%= locals.quotes[i].customerEmail %>">
+						<p class="card-text">Date: <%= locals.quotes[i].dateCreated %></p>
+						<p class="card-text">Description:</p>
+						<input type="text" name="description" id="description" placeholder="Description" value="<%= locals.quotes[i].description %>">
+						<p class="card-text">Discount:</p>
+						<input type="text" name="discount" id="discount" placeholder="$" value="<%= locals.quotes[i].discount %>">
+						<p class="card-text">Items:</p>
+						<table class="table-line-items">
+							<thead>
+								<th scope="col">Description</th>
+								<th scope="col">Price</th>
+								<th scope="col"></th>
+							</thead>
+							<tbody class="item-list">
+								<% for(let j = 0; j < locals.lineItems.length; j++) { %>
+									<%if(locals.lineItems[j].quoteID == locals.quotes[i].quoteID) { %> 
+										<tr>
+											<input type="hidden" name="lineItemID" value="<%= locals.lineItems[j].lineItemID %>">
+											<td><input type="text" name="lineItem<%=j%>" id="lineItem<%=j%>" placeholder="Line Item" value="<%= locals.lineItems[j].description %>"></td>
+											<td><input type="text" pattern="[0-9]*" name="itemPrice<%=j%>" id="itemPrice<%=j%>" placeholder="Line Item Price" value="<%= locals.lineItems[j].price %>"></td>
+											<td><div class="btn-group" role="group" aria-label="Basic mixed styles example">
+												<button class="btn btn-warning removeLineItem">🗑</button>
+											</div></td>
+										</tr>
+									<% } %>
 								<% } %>
-							<% } %>
 
 
-							<tr><td><input type="text" name="newLineDescription"
-								id="newLineDescription" class="newLineDescription" placeholder="Description" value=""></td>
+								<tr><td><input type="text" name="newLineDescription"
+									id="newLineDescription" class="newLineDescription" placeholder="Description" value=""></td>
 
-							<td><input type="text" pattern="[0-9]*" name="newLinePrice" id="newLinePrice"  class="newLinePrice" placeholder="$" value="0"></td>
+								<td><input type="text" pattern="[0-9]*" name="newLinePrice" id="newLinePrice"  class="newLinePrice" placeholder="$" value="0"></td>
 
-							<td><div class="btn-group" role="group" aria-label="Basic mixed styles example">
-								<button class="btn btn-success insert-line-item">✔</button>
-								<button type="button" class="btn btn-warning clear-line-item">X</button>
-							</div></td></tr>
-						</tbody>
-					</table>
-					<p class="card-text">Total: $<%= locals.quotes[i].price %></p>
-					<input type="hidden" name="employeeID" value="<%= locals.employee.employeeID%>">
-					<input type="hidden" name="customerName" value="<%= locals.customerNames[i] %>">
-					<input type="hidden" name="quoteID" value="<%= locals.quotes[i].quoteID %>">
-					<p class="card-text">
-						
-						<button type="submit" href="#" class="btn btn-success">
-						<span class="glyphicon glyphicon-edit"></span> Save Changes
-						</button>
+								<td><div class="btn-group" role="group" aria-label="Basic mixed styles example">
+									<button class="btn btn-success insert-line-item">✔</button>
+									<button type="button" class="btn btn-warning clear-line-item">X</button>
+								</div></td></tr>
+							</tbody>
+						</table>
+						<p class="card-text">Total: $<%= locals.quotes[i].price %></p>
+						<input type="hidden" name="employeeID" value="<%= locals.employee.employeeID%>">
+						<input type="hidden" name="customerName" value="<%= locals.customerNames[i] %>">
+						<input type="hidden" name="quoteID" value="<%= locals.quotes[i].quoteID %>">
+						<p class="card-text">
+							
+							<button type="submit" href="#" class="btn btn-success">
+							<span class="glyphicon glyphicon-edit"></span> Save Changes
+							</button>
 
-						
-					</p>
-				</form>
+							
+						</p>
+					</form>
 				
 
 				<p class="card-text">

@@ -143,7 +143,6 @@
                 <th scope="col">Customer</th>
                 <th scope="col">Price</th>
                 <th scope="col">Status</th>
-                <th scope="col">Details</th>
             </thead>
             
             <%for(let i = 0; i < locals.quotes.length; i++) { %>
@@ -158,7 +157,6 @@
                     <td><%=locals.customers.find(o => o.id == locals.quotes[i].customerID)?.name %></td>
                     <td><%=locals.quotes[i].price%></td>
                     <td><%=locals.quotes[i].status%></td>
-                    <td></td>
                 </tr>
 
             <% } %>
