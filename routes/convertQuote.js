@@ -78,7 +78,7 @@ async function getLoggedEmployee(session) {
 async function takeQuotes(employeeID) {
     console.log(employeeID)
     return new Promise((resolve, reject) => {
-        db.all(`SELECT * FROM quote WHERE employeeID = '${employeeID}' AND status = 'purchased'`, (err, rows) => {
+        db.all(`SELECT * FROM quote WHERE employeeID = '${employeeID}' AND status = 'Sanctioned'`, (err, rows) => {
             if (err) {
                 reject(err);
             } else {

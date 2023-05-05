@@ -34,7 +34,7 @@
         <h2>List of Finalized Quotes:</h2>
 
         <% for(let i = 0; i < locals.quotes.length; i++) { %>
-            <form id="SanctionQuoteForm<%=i%>" name="SanctionQuoteForm<%=i%>" action="" method="POST">
+            <form id="SanctionQuoteForm<%=i%>" name="SanctionQuoteForm<%=i%>" action="/finalizeQuote/convert_quote" method="POST">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Quote: <%= locals.quotes[i].quoteID %></h5>
