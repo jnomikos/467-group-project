@@ -135,10 +135,11 @@
 							<% for(let j = 0; j < locals.lineItems.length; j++) { %>
 								<%if(locals.lineItems[j].quoteID == locals.quotes[i].quoteID) { %> 
 									<tr>
+										<input type="hidden" name="lineItemID" value="<%= locals.lineItems[j].lineItemID %>">
 										<td><input type="text" name="lineItem<%=j%>" id="lineItem<%=j%>" placeholder="Line Item" value="<%= locals.lineItems[j].description %>"></td>
 										<td><input type="text" pattern="[0-9]*" name="itemPrice<%=j%>" id="itemPrice<%=j%>" placeholder="Line Item Price" value="<%= locals.lineItems[j].price %>"></td>
 										<td><div class="btn-group" role="group" aria-label="Basic mixed styles example">
-											<button type="button" class="btn btn-warning">🗑</button>
+											<button class="btn btn-warning removeLineItem">🗑</button>
 										</div></td>
 									</tr>
 								<% } %>
@@ -198,6 +199,8 @@
 
 				const insertLineItemButtons = document.querySelectorAll(".insert-line-item");
 
+				const removeLineItemButtons = document.querySelectorAll(".removeLineItem");
+
 
 				for (let i = 0; i < clearLineItemButtons.length; i++) {
 					clearLineItemButtons[i].addEventListener("click", function(event) {
@@ -216,6 +219,15 @@
 					insertLineItemButtons[i].addEventListener("click", function(event) {
 						event.preventDefault(); // prevent default form submission behavior
 						form.action = "/enterSalesQuote/insert_line_item"; // set action to endpoint 2
+						form.method = "POST";
+						form.submit(); // submit the form
+					});
+				}
+
+				for (let i = 0; i < insertLineItemButtons.length; i++) {
+					removeLineItemButtons[i].addEventListener("click", function(event) {
+						event.preventDefault(); // prevent default form submission behavior
+						form.action = "/enterSalesQuote/remove_line_item"; // set action to endpoint 2
 						form.method = "POST";
 						form.submit(); // submit the form
 					});
