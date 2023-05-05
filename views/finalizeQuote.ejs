@@ -64,6 +64,15 @@
                     </p>    
                 <% } else { %>
                     <form id="EditQuoteForm<%=i%>" name="EditQuoteForm<%=i%>" action="/finalizeQuote/update_quote" method="post">
+                        <% if(locals.failureString.length > 0) { %>
+                            <div class="alert alert-danger" role="alert">
+                                <% if(locals.failureString == 'invalidEmail') { %>
+                                    Invalid Email!
+                                <% } else if(locals.failureString == 'invalidDiscount') { %>
+                                    Discount must be a number!
+                                <% } %>
+                            </div>
+                        <% } %>
                         <h5 class="card-title">Quote <%= locals.quotes[i].quoteID %></h5>
                         <h6 class="card-subtitle mb-2 text-muted">Customer: <%= locals.customerNames[i] %></h6>
                         <p class="card-text">Customer Email:</p>
@@ -116,6 +125,14 @@
                             </button> 
                         </p>
                     </form>
+
+                    <p class="card-text">
+                        <form id="Cancel<%=i%>" name="CancelQuote<%=i%>" action="/finalizeQuote" method="GET">
+                            <button type="submit" href="#" class="btn btn-info">
+                                <span class="glyphicon glyphicon-edit"></span> Cancel
+                            </button>
+                        </form>
+                    </p>
     
                 <% } %>
             </div>

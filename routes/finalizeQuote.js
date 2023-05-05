@@ -41,6 +41,7 @@ router.get("/", async (req, res) => {
         }
 
         const editQuote = req.query.editQuoteID || "-1";
+        const failureString = req.query.failure || "";
         const lineItems = await getLineItems(employee[0].employeeID);
 
         let customerNames = [];
@@ -56,7 +57,7 @@ router.get("/", async (req, res) => {
                 for(let i = 0; i < results.length; i++){
                     customerNames.push(results[i].name);
                 }
-                res.render("finalizeQuote", {loggedOn: true, username: session.username, employee: employee[0], quotes: quotes, customerNames: customerNames, lineItems: lineItems, editQuote: editQuote});
+                res.render("finalizeQuote", {loggedOn: true, username: session.username, employee: employee[0], quotes: quotes, customerNames: customerNames, lineItems: lineItems, editQuote: editQuote, failureString: failureString});
             }
         );
 
@@ -133,7 +134,17 @@ router.post("/update_quote", (req, res) => {
     const description = req.body.description || "";
     const discount = req.body.discount || 0;
 
-    console.log(req.body);
+    if(!ValidateEmail(customerEmail)) {
+        console.log("Invalid email");
+        res.redirect(`/finalizeQuote?editQuoteID=${quoteID}&failure=invalidEmail`);
+        return;
+    }
+
+    if(!ValidateNumber(discount)) {
+        console.log("Invalid discount");
+        res.redirect(`/finalizeQuote?editQuoteID=${quoteID}&failure=invalidDiscount`);
+        return;
+    }
 
     //const lineItemProperties = Object.keys(req.body).filter(prop => prop.startsWith('lineItem'));
     const itemPriceProperties = Object.keys(req.body).filter(prop => prop.startsWith('itemPrice'));
