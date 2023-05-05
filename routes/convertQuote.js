@@ -36,6 +36,10 @@ router.get("/", async (req, res) => {
         const lineItems = await getLineItems();
         console.log(lineItems);
 
+        for(let i = 0; i < quotes.length; i++){
+            quotes[i].price = await findPriceTotal(quotes[i].quoteID);
+        }
+
         res.render("convertQuote", {loggedOn: true, username: session.username, employee: employee[0], quotes: quotes});
     }
 });
@@ -121,6 +125,23 @@ async function takeQuotes(employeeID) {
                 reject(err);
             } else {
                 resolve(rows);
+            }
+        });
+    });
+}
+
+// Find price total (not including discount)
+async function findPriceTotal(quoteID) {
+    return new Promise((resolve, reject) => {
+        let totalAmt = 0;
+        db.all(`SELECT * FROM lineItems WHERE quoteID = '${quoteID}'`, (err, rows) => {
+            if(err){
+                reject(err);
+            }else{
+                for(let i = 0; i < rows.length; i++){
+                    totalAmt += rows[i].price;
+                }
+                resolve(totalAmt);
             }
         });
     });

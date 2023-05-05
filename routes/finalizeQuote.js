@@ -165,6 +165,20 @@ router.get('/logout',(req,res) => {
     res.redirect('/');
 });
 
+function ValidateEmail(email) 
+{
+
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+        return true;
+    }
+    return false;
+}
+
+// Validates that numeric values are entered
+function ValidateNumber(number) {
+    return /^\d+$/.test(number);
+}
+
 // Find price total (not including discount)
 async function findPriceTotal(quoteID) {
     return new Promise((resolve, reject) => {
