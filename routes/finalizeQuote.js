@@ -37,6 +37,7 @@ router.get("/", async (req, res) => {
         console.log(quotes);
 
         const editQuote = req.query.editQuoteID || "-1";
+        const lineItems = await getLineItems(employee[0].employeeID);
 
         let customerNames = [];
         connection.query(
@@ -51,7 +52,7 @@ router.get("/", async (req, res) => {
                 for(let i = 0; i < results.length; i++){
                     customerNames.push(results[i].name);
                 }
-                res.render("finalizeQuote", {loggedOn: true, username: session.username, employee: employee[0], quotes: quotes, customerNames: customerNames});
+                res.render("finalizeQuote", {loggedOn: true, username: session.username, employee: employee[0], quotes: quotes, customerNames: customerNames, lineItems: lineItems, editQuote: editQuote});
             }
         );
 
@@ -81,6 +82,80 @@ router.post("/convert_quote", (req, res) => {
     });
 });
 
+router.post("/insert_line_item", (req, res) => {
+    const quoteID = req.body.quoteID;
+    const price = req.body.newLinePrice;
+    const description = req.body.newLineDescription;
+
+    console.log("QUOTE ID: " + quoteID)
+    console.log("PRICE: " + price);
+    console.log("DESCRIPTION: " + description);
+
+    db.run(`INSERT INTO lineItems (quoteID, price, description) VALUES ("${quoteID}", "${price}", "${description}")`, (err) => {
+        if (err) {
+            console.log(err);
+            res.redirect("/");
+        } else {
+            res.redirect("/finalizeQuote?editQuoteID=" + quoteID);
+        }
+    });
+});
+
+router.post("/remove_line_item", (req, res) => {
+    console.log(req.body)
+    const quoteID = req.body.quoteID;
+    const lineItemID = req.body.lineItemID;
+    const price = req.body["lineItem" + lineItemID - 1];
+    const description = req.body.newLineDescription;
+
+    console.log("QUOTE ID: " + quoteID)
+    console.log("PRICE: " + price);
+    console.log("DESCRIPTION: " + description);
+
+    db.run(`REMOVE FROM lineItems WHERE quoteID = "${quoteID}" AND price = "${price}" AND description = "${description}")`, (err) => {
+        if (err) {
+            console.log(err);
+            res.redirect("/");
+        } else {
+            res.redirect("/finalizeQuote?editQuoteID=" + quoteID);
+        }
+    });
+});
+
+//allow employees to update sales quotes
+router.post("/update_quote", (req, res) => {
+    const quoteID = req.body.quoteID;
+    const customerEmail = req.body.customerEmail || "";
+    const description = req.body.description || "";
+    const discount = req.body.discount || 0;
+
+    console.log(req.body);
+
+    //const lineItemProperties = Object.keys(req.body).filter(prop => prop.startsWith('lineItem'));
+    const itemPriceProperties = Object.keys(req.body).filter(prop => prop.startsWith('itemPrice'));
+
+    //console.log(lineItemProperties);
+    console.log(itemPriceProperties);
+
+    let total = 0;
+
+    for(let x = 0; x < itemPriceProperties.length; x++) {
+        //const lineItem = req.body[lineItemProperties[x]];
+        const linePrice = req.body[itemPriceProperties[x]];
+
+        total += parseInt(linePrice);
+    }
+
+    db.run(`UPDATE quote SET description = "${description}", price = "${total}", customerEmail = "${customerEmail}", discount="${discount}" WHERE quoteID = "${quoteID}"`, (err) => {
+        if (err) {
+            console.log(err);
+            res.redirect("/");
+        } else {
+            res.redirect("/finalizeQuote");
+        }
+    });
+});
+
 router.get('/logout',(req,res) => {
     req.session.destroy();
     res.redirect('/');
@@ -103,6 +178,18 @@ async function getLoggedEmployee(session) {
     console.log(session.username)
     return new Promise((resolve, reject) => {
         db.all(`SELECT * FROM employee WHERE isAdmin = 0 AND username = '${session.username}'`, (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
+
+async function getLineItems() {
+    return new Promise((resolve, reject) => {
+        db.all(`SELECT * FROM lineItems`, (err, rows) => {
             if (err) {
                 reject(err);
             } else {
