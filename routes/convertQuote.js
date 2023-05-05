@@ -17,7 +17,6 @@ const router = express.Router();
 const sqlite3 = require('sqlite3').verbose();
 const mysql = require('mysql2');
 
-
 // Open database
 let db = new sqlite3.Database('database/mydatabase.db');
 
