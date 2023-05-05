@@ -31,5 +31,24 @@
         </div>
     </nav>
     <h2>List of Sanctioned quotes:</h2>
+    <% for(let i = 0; i < locals.quotes.length; i++) { %>
+      <form id="SanctionQuoteForm<%=i%>" name="SanctionQuoteForm<%=i%>" action="" method="POST">
+          <div class="card">
+              <div class="card-body">
+                  <h5 class="card-title">Quote: <%= locals.quotes[i].quoteID %></h5>
+                  <p class="card-text">Date Created: <%= locals.quotes[i].dateCreated %></p>
+                  <h6 class="card-subtitle mb-2 text-muted">Customer: <%= locals.quotes[i].name %></h6>
+                  <p class="card-text">Customer Email: <%= locals.quotes[i].customerEmail %></p>
+                  <p class="card-text">Description: <%= locals.quotes[i].description %></p>
+                  <p class="card-text">Total: $<%= locals.quotes[i].price %></p>
+                  <p class="card-footer">
+                  </p>
+                  <button type="submit" class="btn btn-secondary finalize-quote-button">
+                    Sanction Quote
+                  </button> 
+              </div>
+          </div>  
+      </form>  
+  <% } %>
 </body>
 </html>

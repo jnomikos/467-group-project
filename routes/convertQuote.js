@@ -21,15 +21,23 @@ const mysql = require('mysql2');
 // Open database
 let db = new sqlite3.Database('database/mydatabase.db');
 
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
     console.log("Convert Quote");
-        db.all(`SELECT * FROM quote where status = 'finalized'`, (err, rows) => {
-            if (err) {
-                console.log(err);
-            }
-            res.render("convertQuote", {rows: rows});
-        }
-    );
+    let session = req.session;
+    if(!session.username){
+        res.redirect('/');
+    } else{
+        const employee = await getLoggedEmployee(session);
+        console.log(employee);
+
+        let quotes = await takeQuotes(employee[0].employeeID);
+        console.log(quotes);
+
+        const lineItems = await getLineItems();
+        console.log(lineItems);
+
+        res.render("convertQuote", {loggedOn: true, username: session.username, employee: employee[0], quotes: quotes});
+    }
 });
 
 router.post("/convertQuote", (req, res) => {
@@ -56,5 +64,43 @@ router.get('/logout',(req,res) => {
     req.session.destroy();
     res.redirect('/');
 });
+
+async function getLoggedEmployee(session) {
+    console.log(session.username)
+    return new Promise((resolve, reject) => {
+        db.all(`SELECT * FROM employee WHERE isAdmin = 0 AND username = '${session.username}'`, (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
+
+async function getLineItems() {
+    return new Promise((resolve, reject) => {
+        db.all(`SELECT * FROM lineItems`, (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
+
+async function takeQuotes(employeeID) {
+    console.log(employeeID)
+    return new Promise((resolve, reject) => {
+        db.all(`SELECT * FROM quote WHERE employeeID = '${employeeID}' AND status = 'Sanctioned'`, (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
 
 module.exports = router;
