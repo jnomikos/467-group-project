@@ -16,6 +16,7 @@ const express = require('express');
 const router = express.Router();
 const sqlite3 = require('sqlite3').verbose();
 const mysql = require('mysql2');
+var nodemailer = require('nodemailer');
 
 // Open database
 let db = new sqlite3.Database('database/mydatabase.db');
@@ -56,6 +57,29 @@ router.post("/convertQuote", (req, res) => {
             console.log(err);
         }
         res.render("convertQuote", {rows: rows});
+    });
+
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+        user: 'plantrepairservices24@gmail.com',
+        pass: 'Plantrepair24'
+        }
+    });
+    
+    var mailOptions = {
+        from: 'plantrepairservices24@gmail.com',
+        to: 'myfriend@yahoo.com',
+        subject: 'Your Quote Has Been Purchased!',
+        text: 'Thank you for choosing Plant Reapair Services!'
+    };
+    
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+        console.log(error);
+        } else {
+        console.log('Email sent: ' + info.response);
+        }
     });
 });
 
