@@ -190,10 +190,34 @@ router.post("/insert_line_item", (req, res) => {
         if (err) {
             console.log(err);
             res.redirect("/");
+        } else {
+            res.redirect("/enterSalesQuote?editQuoteID=" + quoteID);
         }
     });
 
-    res.redirect("/enterSalesQuote?editQuoteID=" + quoteID);
+    
+});
+
+router.post("/remove_line_item", (req, res) => {
+    console.log(req.body)
+    const quoteID = req.body.quoteID;
+    const lineItemID = req.body.lineItemID;
+    const price = req.body["lineItem" + lineItemID - 1];
+    const description = req.body.newLineDescription;
+
+    console.log("QUOTE ID: " + quoteID)
+    console.log("PRICE: " + price);
+    console.log("DESCRIPTION: " + description);
+
+    db.run(`REMOVE FROM lineItems WHERE quoteID = "${quoteID}" AND price = "${price}" AND description = "${description}")`, (err) => {
+        if (err) {
+            console.log(err);
+            res.redirect("/");
+        } else {
+            res.redirect("/enterSalesQuote?editQuoteID=" + quoteID);
+        }
+    });
+
 });
 
 
