@@ -16,6 +16,14 @@ const sqlite3 = require('sqlite3').verbose();
 const mysql = require('mysql2');
 let db = new sqlite3.Database('database/mydatabase.db');
 
+const connection = mysql.createConnection({
+    host: 'blitz.cs.niu.edu',
+    user: 'student',
+    password: 'student',
+    database: 'csci467',
+    port: '3306'
+});
+
 router.get("/", async (req, res) => {
     console.log("Finalize Quote");
     let session = req.session;
@@ -28,7 +36,25 @@ router.get("/", async (req, res) => {
         let quotes = await grabQuotes(employee[0].employeeID);
         console.log(quotes);
 
-        res.render("finalizeQuote", {loggedOn: true, username: session.username, employee: employee[0], quotes: quotes});
+        const editQuote = req.query.editQuoteID || "-1";
+
+        let customerNames = [];
+        connection.query(
+            'SELECT * FROM `customers`',
+            function(err, results, fields){
+                if(err){
+                    console.error(err);
+                    res.redirect('/');
+                    return;
+                }
+
+                for(let i = 0; i < results.length; i++){
+                    customerNames.push(results[i].name);
+                }
+                res.render("finalizeQuote", {loggedOn: true, username: session.username, employee: employee[0], quotes: quotes, customerNames: customerNames});
+            }
+        );
+
     }
 });
 

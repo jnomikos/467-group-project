@@ -33,24 +33,32 @@
     </nav>
         <h2>List of Finalized Quotes:</h2>
 
-        <% for(let i = 0; i < locals.quotes.length; i++) { %>
-            <form id="SanctionQuoteForm<%=i%>" name="SanctionQuoteForm<%=i%>" action="/finalizeQuote/convert_quote" method="POST">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Quote: <%= locals.quotes[i].quoteID %></h5>
-                        <p class="card-text">Date Created: <%= locals.quotes[i].dateCreated %></p>
-                        <h6 class="card-subtitle mb-2 text-muted">Customer: <%= locals.quotes[i].name %></h6>
-                        <p class="card-text">Customer Email: <%= locals.quotes[i].customerEmail %></p>
-                        <p class="card-text">Description: <%= locals.quotes[i].description %></p>
-                        <p class="card-text">Total: $<%= locals.quotes[i].price %></p>
-                        <p class="card-footer">
-                        </p>    
-                    </div>
-                </div>  
-                <button type="submit" class="btn btn-secondary finalize-quote-button">
-                    Sanction Quote
-                </button>
-            </form>  
-        <% } %>
+    <% for(let i = 0; i < locals.quotes.length; i++) { %>
+        <div class="card">
+            <div class="card-body">
+                <% if(locals.editQuote != locals.quotes[i].quoteID) { %>
+                    <h5 class="card-title">Quote: <%= locals.quotes[i].quoteID %></h5>
+                    <p class="card-text">Date Created: <%= locals.quotes[i].dateCreated %></p>
+                    <h6 class="card-subtitle mb-2 text-muted">Customer: <%= locals.customerNames[i] %></h6>
+                    <p class="card-text">Customer Email: <%= locals.quotes[i].customerEmail %></p>
+                    <p class="card-text">Description: <%= locals.quotes[i].description %></p>
+                    <p class="card-text">Total: $<%= locals.quotes[i].price %></p>
+                    <p class="card-footer">
+                        <form method="POST" action="/finalizeQuote/convert_quote">
+                            <input type="hidden" name="quoteID" value="<%= locals.quotes[i].quoteID%>">
+                            <input type="hidden" name="employeeID" value="<%= locals.employee.employeeID%>">
+                            <input type="hidden" name="customerName" value="<%= locals.customerNames[i] %>">
+                            <input type="hidden" name="customerEmail" value="<%= locals.quotes[i].customerEmail %>">
+                            <input type="hidden" name="description" value="<%= locals.quotes[i].description %>">
+                            
+                            <button type="submit" class="btn btn-secondary sanction-quote-button">
+                                Sanction Quote
+                            </button>
+                        </form>
+                    </p>    
+                <% } %>
+            </div>
+        </div>  
+    <% } %>
 </body>
 </html>
